@@ -7,5 +7,11 @@ public class Driver {
 
         Catch c1 = new Catch(pb1, true, 10.1);
         System.out.println(c1);
+
+        printStartMenu();
+    }
+
+    public static void printStartMenu() {
+        System.out.println("Welcome to Pokemon Ga-Ole!");
     }
 }
