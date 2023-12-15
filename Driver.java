@@ -20,6 +20,9 @@ public class Driver {
         PokeBall pokeBall = new PokeBall();
         System.out.println(pokeBall);
 
+        pokemons.get(0).setStats(new Stats(100, 20, 5, 10, 6));
+        System.out.println(pokemons.get(0).getStats());
+
 
     }
 

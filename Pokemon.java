@@ -26,6 +26,7 @@ public class Pokemon {
     private String moveType;
     private String typeOne;
     private String typeTwo;
+    private Stats stats;
     
     // Constructor
     public Pokemon() {
@@ -39,6 +40,7 @@ public class Pokemon {
         this.zMove = zMove;
         this.moveType = moveType;
         this.typeOne = typeOne;
+        stats = new Stats();
     }
 
     public Pokemon(int collectionNumber, String name, int grade, int pe, String zMove, String moveType, String typeOne, String typeTwo) {
@@ -50,6 +52,7 @@ public class Pokemon {
         this.moveType = moveType;
         this.typeOne = typeOne;
         this.typeTwo = typeTwo;
+        stats = new Stats();
     }
     
     // Getters and Setters
@@ -129,11 +132,19 @@ public class Pokemon {
         throw new IllegalArgumentException("Error: Invalid Pokemon type for " + name + " with type " + typeTwo);
     }
 
+    public Stats getStats() {
+        return stats;
+    }
+
+    public void setStats(Stats stats) {
+        this.stats = stats;
+    }
+
     // Other Methods
 
     // toString
     @Override
     public String toString() {
-        return String.format("Pokemon [collectionNumber=%d, name=%s, grade=%d, pe=%d, zMove=%s, moveType=%s, typeOne=%s, typeTwo=%s]", collectionNumber, name, grade, pe, zMove, moveType, typeOne, typeTwo);
+        return String.format("Pokemon [collectionNumber=%d, name=%s, grade=%d, pe=%d, zMove=%s, moveType=%s, typeOne=%s, typeTwo=%s] with %s", collectionNumber, name, grade, pe, zMove, moveType, typeOne, typeTwo, stats);
     }
 }

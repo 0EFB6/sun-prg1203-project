@@ -7,6 +7,11 @@ public class Stats {
 
     // Constructor
     public Stats() {
+        hp = 0;
+        specialAttackPower = 0;
+        defensePower = 0;
+        specialDefensePower = 0;
+        speed = 0;
     }
 
     public Stats(int hp, int specialAttackPower, int defensePower, int specialDefensePower, int speed) {
@@ -63,7 +68,7 @@ public class Stats {
     // toString
     @Override
     public String toString() {
-        return String.format("Stats: hp=%d, specialAttackPower=%d, defensePower=%d, specialDefensePower=%d, speed=%d",
+        return String.format("Stats [hp=%d, specialAttackPower=%d, defensePower=%d, specialDefensePower=%d, speed=%d]",
                 hp, specialAttackPower, defensePower, specialDefensePower, speed);
     }
 }
