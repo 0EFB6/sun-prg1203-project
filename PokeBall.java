@@ -1,21 +1,24 @@
+import java.util.Random;
+
 public class PokeBall {
-    private String ballType;
+    public enum PokeballType {
+        POKE_BALL, GREAT_BALL, ULTRA_BALL, MASTER_BALL
+    }
+    private PokeballType ballType;
 
     // Constructor
     public PokeBall() {
-    }
-
-    public PokeBall(String ballType) {
-        this.ballType = ballType;
+        setBallType();
     }
 
     // Getters and Setters
-    public String getBallType() {
+    public PokeballType getBallType() {
         return ballType;
     }
 
-    public void setBallType(String ballType) {
-        this.ballType = ballType;
+    public void setBallType() {
+        PokeballType[] type = PokeballType.values();
+        this.ballType = type[new Random().nextInt(type.length)];
     }
 
     // Other methods

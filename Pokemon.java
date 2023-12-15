@@ -3,20 +3,50 @@ public class Pokemon {
     private String name;
     private int grade;
     private int pe;
+    public enum element{
+        DRAGON,
+        ELECTRIC,
+        POISON,
+        PSYCHIC,
+        FIRE,
+        GHOST,
+        ROCK,
+        BUG,
+        DARK,
+        FIGHTING,
+        GRASS,
+        GROUND,
+        STEEL,
+        WATER,
+        FLYING,
+        ICE,
+        NORMAL
+    }
     private String zMove;
-    private String element;
     private String moveType;
     private String typeOne;
     private String typeTwo;
     
     // Constructor
-    public Pokemon(int collectionNumber, String name, int grade, int pe, String zMove, String element, String moveType, String typeOne, String typeTwo) {
+    public Pokemon() {
+    }
+
+    public Pokemon(int collectionNumber, String name, int grade, int pe, String zMove, String moveType, String typeOne) {
         this.collectionNumber = collectionNumber;
         this.name = name;
         this.grade = grade;
         this.pe = pe;
         this.zMove = zMove;
-        this.element = element;
+        this.moveType = moveType;
+        this.typeOne = typeOne;
+    }
+
+    public Pokemon(int collectionNumber, String name, int grade, int pe, String zMove, String moveType, String typeOne, String typeTwo) {
+        this.collectionNumber = collectionNumber;
+        this.name = name;
+        this.grade = grade;
+        this.pe = pe;
+        this.zMove = zMove;
         this.moveType = moveType;
         this.typeOne = typeOne;
         this.typeTwo = typeTwo;
@@ -63,14 +93,6 @@ public class Pokemon {
         this.zMove = zMove;
     }
 
-    public String getElement() {
-        return element;
-    }
-
-    public void setElement(String element) {
-        this.element = element;
-    }
-
     public String getMoveType() {
         return moveType;
     }
@@ -84,7 +106,13 @@ public class Pokemon {
     }
 
     public void setTypeOne(String typeOne) {
-        this.typeOne = typeOne;
+        for (element Element : element.values()) {
+            if (Element.name().equalsIgnoreCase(typeOne)) {
+                this.typeOne = typeOne;
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Error: Invalid Pokemon type for " + name + " with type " + typeOne);
     }
 
     public String getTypeTwo() {
@@ -92,7 +120,13 @@ public class Pokemon {
     }
 
     public void setTypeTwo(String typeTwo) {
-        this.typeTwo = typeTwo;
+        for (element Element : element.values()) {
+            if (Element.name().equalsIgnoreCase(typeTwo)) {
+                this.typeTwo = typeTwo;
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Error: Invalid Pokemon type for " + name + " with type " + typeTwo);
     }
 
     // Other Methods
@@ -100,6 +134,6 @@ public class Pokemon {
     // toString
     @Override
     public String toString() {
-        return String.format("Pokemon{collectionNumber=%d, name=%s, grade=%d, pe=%d, zMove=%s, element=%s, moveType=%s, typeOne=%s, typeTwo=%s}", collectionNumber, name, grade, pe, zMove, element, moveType, typeOne, typeTwo);
+        return String.format("Pokemon [collectionNumber=%d, name=%s, grade=%d, pe=%d, zMove=%s, moveType=%s, typeOne=%s, typeTwo=%s]", collectionNumber, name, grade, pe, zMove, moveType, typeOne, typeTwo);
     }
 }
