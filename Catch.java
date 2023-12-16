@@ -14,7 +14,7 @@ public class Catch {
         this.pokeball = pokeball;
         this.success = success;
         this.catchTime = catchTime;
-    }    
+    }
 
     // Getters and Setters
     public void setPokeBall(PokeBall pokeball) {
