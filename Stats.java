@@ -1,5 +1,6 @@
 public class Stats {
     private int hp;
+    private int attackPower;
     private int specialAttackPower;
     private int defensePower;
     private int specialDefensePower;
@@ -8,14 +9,16 @@ public class Stats {
     // Constructor
     public Stats() {
         hp = 0;
+        attackPower = 0;
         specialAttackPower = 0;
         defensePower = 0;
         specialDefensePower = 0;
         speed = 0;
     }
 
-    public Stats(int hp, int specialAttackPower, int defensePower, int specialDefensePower, int speed) {
+    public Stats(int hp, int attackPower, int specialAttackPower, int defensePower, int specialDefensePower, int speed) {
         this.hp = hp;
+        this.attackPower = attackPower;
         this.specialAttackPower = specialAttackPower;
         this.defensePower = defensePower;
         this.specialDefensePower = specialDefensePower;
@@ -29,6 +32,14 @@ public class Stats {
 
     public void setHp(int hp) {
         this.hp = hp;
+    }
+
+    public int getAttackPower() {
+        return attackPower;
+    }
+
+    public void setAttackPower(int attackPower) {
+        this.attackPower = attackPower;
     }
 
     public int getSpecialAttackPower() {
@@ -68,7 +79,15 @@ public class Stats {
     // toString
     @Override
     public String toString() {
-        return String.format("Stats [hp=%d, specialAttackPower=%d, defensePower=%d, specialDefensePower=%d, speed=%d]",
-                hp, specialAttackPower, defensePower, specialDefensePower, speed);
+        return String.format("Stats [hp=%d, attackPower=%d, specialAttackPower=%d, defensePower=%d, specialDefensePower=%d, speed=%d]",
+                hp, attackPower, specialAttackPower, defensePower, specialDefensePower, speed);
     }
+
+    public void decreaseHp(int damage) {
+        hp -= damage;
+    }
+
+    public void increaseHp(int heal) {
+        hp += heal;
+    }    
 }

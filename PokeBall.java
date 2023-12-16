@@ -4,11 +4,15 @@ public class PokeBall {
     public enum PokeballType {
         POKE_BALL, GREAT_BALL, ULTRA_BALL, MASTER_BALL
     }
-    private PokeballType ballType;
+    protected PokeballType ballType;
 
     // Constructor
     public PokeBall() {
-        setBallType();
+        setBallType(0);
+    }
+
+    public PokeBall(int index) {
+        setBallType(index);
     }
 
     // Getters and Setters
@@ -16,9 +20,9 @@ public class PokeBall {
         return ballType;
     }
 
-    public void setBallType() {
+    public void setBallType(int index) {
         PokeballType[] type = PokeballType.values();
-        this.ballType = type[new Random().nextInt(type.length)];
+        this.ballType = type[index];
     }
 
     // Other methods

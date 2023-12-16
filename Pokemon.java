@@ -24,34 +24,21 @@ public class Pokemon {
     }
     private String zMove;
     private String moveType;
-    private String typeOne;
-    private String typeTwo;
+    private String type;
     private Stats stats;
     
     // Constructor
     public Pokemon() {
     }
 
-    public Pokemon(int collectionNumber, String name, int grade, int pe, String zMove, String moveType, String typeOne) {
+    public Pokemon(int collectionNumber, String name, int grade, int pe, String zMove, String moveType, String type) {
         this.collectionNumber = collectionNumber;
         this.name = name;
         this.grade = grade;
         this.pe = pe;
         this.zMove = zMove;
         this.moveType = moveType;
-        this.typeOne = typeOne;
-        stats = new Stats();
-    }
-
-    public Pokemon(int collectionNumber, String name, int grade, int pe, String zMove, String moveType, String typeOne, String typeTwo) {
-        this.collectionNumber = collectionNumber;
-        this.name = name;
-        this.grade = grade;
-        this.pe = pe;
-        this.zMove = zMove;
-        this.moveType = moveType;
-        this.typeOne = typeOne;
-        this.typeTwo = typeTwo;
+        this.type = type;
         stats = new Stats();
     }
     
@@ -104,32 +91,18 @@ public class Pokemon {
         this.moveType = moveType;
     }
 
-    public String getTypeOne() {
-        return typeOne;
+    public String getType() {
+        return type;
     }
 
-    public void setTypeOne(String typeOne) {
+    public void setType(String type) {
         for (element Element : element.values()) {
-            if (Element.name().equalsIgnoreCase(typeOne)) {
-                this.typeOne = typeOne;
+            if (Element.name().equalsIgnoreCase(type)) {
+                this.type = type;
                 return;
             }
         }
-        throw new IllegalArgumentException("Error: Invalid Pokemon type for " + name + " with type " + typeOne);
-    }
-
-    public String getTypeTwo() {
-        return typeTwo;
-    }
-
-    public void setTypeTwo(String typeTwo) {
-        for (element Element : element.values()) {
-            if (Element.name().equalsIgnoreCase(typeTwo)) {
-                this.typeTwo = typeTwo;
-                return;
-            }
-        }
-        throw new IllegalArgumentException("Error: Invalid Pokemon type for " + name + " with type " + typeTwo);
+        throw new IllegalArgumentException("Error: Invalid Pokemon type for " + name + " with type " + type);
     }
 
     public Stats getStats() {
@@ -145,6 +118,15 @@ public class Pokemon {
     // toString
     @Override
     public String toString() {
-        return String.format("Pokemon [collectionNumber=%d, name=%s, grade=%d, pe=%d, zMove=%s, moveType=%s, typeOne=%s, typeTwo=%s] with %s", collectionNumber, name, grade, pe, zMove, moveType, typeOne, typeTwo, stats);
+        return String.format("Pokemon [collectionNumber=%d, name=%s, grade=%d, pe=%d, zMove=%s, moveType=%s, type=%s] with %s", collectionNumber, name, grade, pe, zMove, moveType, type, stats);
     }
+
+    public void attack(Pokemon enemy, int damage) {
+        enemy.getStats().decreaseHp(damage);
+
+        if (enemy.getType() == "FIRE" && this.getType() == "WATER") {
+            System.out.println("Not very effective!");
+        }
+    }
+
 }
