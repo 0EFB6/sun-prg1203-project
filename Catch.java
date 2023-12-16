@@ -1,19 +1,18 @@
+import java.util.Random;
+
 public class Catch {
     private PokeBall pokeball;
-    private boolean success;
-    private double catchTime;
+    private int successRate;
 
     // Constructor
     public Catch() {
         this.pokeball = null;
-        this.success = false;
-        this.catchTime = 0.0;
+        this.successRate = 0;
     }
 
-    public Catch(PokeBall pokeball, boolean success, double catchTime) {
+    public Catch(PokeBall pokeball, int successRate) {
         this.pokeball = pokeball;
-        this.success = success;
-        this.catchTime = catchTime;
+        this.successRate = successRate;
     }
 
     // Getters and Setters
@@ -25,20 +24,12 @@ public class Catch {
         return pokeball;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setSuccess(int successRate) {
+        this.successRate = successRate;
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setCatchTime(double catchTime) {
-        this.catchTime = catchTime;
-    }
-
-    public double getCatchTime() {
-        return catchTime;
+    public int isSuccess() {
+        return successRate;
     }
 
     // Other methods
@@ -46,6 +37,19 @@ public class Catch {
     // toString
     @Override
     public String toString() {
-        return String.format("PokeBall: %s, Success: %s, Catch Time: %.2f", pokeball, success, catchTime);
+        return String.format("PokeBall: %s, Success Rate: %d", pokeball, successRate);
+    }
+
+    public boolean catchPokeball(Pokemon pokemon) {
+        Random random = new Random();
+        int randomNum = random.nextInt(100);
+
+        if (randomNum <= successRate) {
+            System.out.println("You caught " + pokemon.getName() + "!");
+            return true;
+        }
+        else
+            System.out.println("You failed to catch " + pokemon.getName() + "!");
+        return false;
     }
 }

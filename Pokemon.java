@@ -121,12 +121,44 @@ public class Pokemon {
         return String.format("Pokemon [collectionNumber=%d, name=%s, grade=%d, pe=%d, zMove=%s, moveType=%s, type=%s] with %s", collectionNumber, name, grade, pe, zMove, moveType, type, stats);
     }
 
-    public void attack(Pokemon enemy, int damage) {
-        enemy.getStats().decreaseHp(damage);
 
-        if (enemy.getType() == "FIRE" && this.getType() == "WATER") {
-            System.out.println("Not very effective!");
+
+    public void decreaseHp(double damage) {
+        stats.decreaseHp(damage);
+    }
+
+    public double getHp() {
+        return stats.getHp();
+    }
+
+    public int getAttackPower() {
+        return stats.getAttackPower();
+    }
+
+    public int getSpecialAttackPower() {
+        return stats.getSpecialAttackPower();
+    }
+
+    public int getDefensePower() {
+        return stats.getDefensePower();
+    }
+
+    public int getSpecialDefensePower() {
+        return stats.getSpecialDefensePower();
+    }
+
+    public void attack(Pokemon enemy, String attackType) {
+        System.out.println("Pokemon " + getName() + " attacks " + enemy.getName() + " with " + getMoveType() + " move " + getZMove());
+
+        if (attackType.equalsIgnoreCase("special")) {
+            enemy.decreaseHp(getSpecialAttackPower());
         }
+        else if (attackType.equalsIgnoreCase("normal")) {
+            enemy.decreaseHp(getAttackPower());
+        }
+
+        System.out.println("Enemy " + enemy.getName() + " has " + enemy.getHp() + " HP left");
+        System.out.println("You have " + getHp() + " HP left");
     }
 
 }

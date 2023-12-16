@@ -1,5 +1,5 @@
 public class Stats {
-    private int hp;
+    private double hp;
     private int attackPower;
     private int specialAttackPower;
     private int defensePower;
@@ -26,7 +26,7 @@ public class Stats {
     }
 
     // Getters and Setters
-    public int getHp() {
+    public double getHp() {
         return hp;
     }
 
@@ -79,15 +79,15 @@ public class Stats {
     // toString
     @Override
     public String toString() {
-        return String.format("Stats [hp=%d, attackPower=%d, specialAttackPower=%d, defensePower=%d, specialDefensePower=%d, speed=%d]",
+        return String.format("Stats [hp=%.2f, attackPower=%d, specialAttackPower=%d, defensePower=%d, specialDefensePower=%d, speed=%d]",
                 hp, attackPower, specialAttackPower, defensePower, specialDefensePower, speed);
     }
 
-    public void decreaseHp(int damage) {
+    public void decreaseHp(double damage) {
         hp -= damage;
     }
 
-    public void increaseHp(int heal) {
+    public void increaseHp(double heal) {
         hp += heal;
     }    
 }
