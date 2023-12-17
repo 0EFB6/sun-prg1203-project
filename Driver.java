@@ -184,7 +184,7 @@ public class Driver {
                     }
         }
 
-        if (player.getPokemonHp() <= 0)
+        if (player.getPokemonHp() <= 0 && enemy.get(0).getPokemonHp() > 0 && enemy.get(1).getPokemonHp() > 0)
         {
             System.out.println("You lose. Game Over!");
             return false;
@@ -196,63 +196,71 @@ public class Driver {
 
     public static void  catchPokemon(List<Pokemon> enemy, Scanner scanner) {
         Catch catchPokeball = null;
-        int pokeballChoice;
+        int pokeballChoice = 0;
+        int pokemonChoice = 0;
         boolean validInput2 = false;
 
-        System.out.println();
-        System.out.println("Use a Pokeball to catch " + enemy.get(0).getName() + "!");
-        System.out.print("Select a pokeball? [Y/N]");
-        String selectPokeball = scanner.next();
-
-        if (selectPokeball.equalsIgnoreCase("Y")) {
-            System.out.println();
-            System.out.println("Select a pokeball: ");
-            System.out.println("1. Pokeball");
-            System.out.println("2. Greatball");
-            System.out.println("3. Ultraball");
-            System.out.println("4. Masterball");
-            
-            do {
-                System.out.print("Enter your choice (1-4): ");
-                try {
-                    pokeballChoice = scanner.nextInt();
-                    if (pokeballChoice >= 1 && pokeballChoice <= 4)
-                    {
-                        validInput2 = true;
-                        
-                        switch (pokeballChoice) {
-                            case 1:
-                                System.out.println("You have selected Pokeball!");
-                                catchPokeball = new Catch(new PokeBall(), 25);
-                                break;
-                            case 2:
-                                System.out.println("You have selected Greatball!");
-                                catchPokeball = new Catch(new PokeBall(), 50);
-                                break;
-                            case 3:
-                                System.out.println("You have selected Ultraball!");
-                                catchPokeball = new Catch(new PokeBall(), 75);
-                                break;
-                            case 4:
-                                System.out.println("You have selected Masterball!");
-                                catchPokeball = new Catch(new PokeBall(), 100);
-                                break;
-                        }
-                        System.out.println();
-                        catchPokeball.catchPokeball(enemy.get(0));
-                    }
-                    else
-                        System.out.println("Enter integers ranging from 1 to 4 ONLY!");
-                }
-                catch (Exception e) {
-                    System.out.println("Enter integers ranging from 1 to 4 ONLY!");
-                    scanner.nextLine(); // Clear the input buffer
-                }
-            } while (!validInput2);
-               
+        if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() <= 0)
+        {
+            System.out.println("Select a pokemon to catch: ");
+            System.out.println("1. " + enemy.get(0).getName());
+            System.out.println("2. " + enemy.get(1).getName());
+            System.out.print("Enter your choice (1 or 2): ");
+            pokemonChoice = scanner.nextInt();
         }
-        else if (selectPokeball.equalsIgnoreCase("N"))
-            System.out.println("You have cancelled the battle!");
+        else if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() > 0)
+            pokemonChoice = 1;
+        else if (enemy.get(1).getPokemonHp() <= 0 && enemy.get(0).getPokemonHp() > 0)
+            pokemonChoice = 2;
+        System.out.println();
+        System.out.println("Use a Pokeball to catch " + enemy.get(pokemonChoice - 1).getName() + "!");
+        System.out.println();
+        System.out.println("Select a pokeball: ");
+        System.out.println("1. Pokeball");
+        System.out.println("2. Greatball");
+        System.out.println("3. Ultraball");
+        System.out.println("4. Masterball");
+        
+        do {
+            System.out.print("Enter your choice (1-4): ");
+            try {
+                pokeballChoice = scanner.nextInt();
+                if (pokeballChoice >= 1 && pokeballChoice <= 4)
+                {
+                    validInput2 = true;
+                    
+                    switch (pokeballChoice) {
+                        case 1:
+                            System.out.println("You have selected Pokeball!");
+                            catchPokeball = new Catch(new PokeBall(), 25);
+                            break;
+                        case 2:
+                            System.out.println("You have selected Greatball!");
+                            catchPokeball = new Catch(new GreatBall(), 50);
+                            break;
+                        case 3:
+                            System.out.println("You have selected Ultraball!");
+                            catchPokeball = new Catch(new UltraBall(), 75);
+                            break;
+                        case 4:
+                            System.out.println("You have selected Masterball!");
+                            catchPokeball = new Catch(new MasterBall(), 100);
+                            break;
+                    }
+                    System.out.println();
+                    catchPokeball.catchPokeball(enemy.get(pokemonChoice - 1));
+                }
+                else
+                    System.out.println("Enter integers ranging from 1 to 4 ONLY!");
+            }
+            catch (Exception e) {
+                System.out.println("Enter integers ranging from 1 to 4 ONLY!" + e);
+                scanner.nextLine(); // Clear the input buffer
+            }
+        } while (!validInput2);
+
+
+
     }
 
     public static void startBattle(Pokemon player, List<Pokemon> enemy, Scanner scanner) {

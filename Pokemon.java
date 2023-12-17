@@ -150,11 +150,11 @@ public class Pokemon {
     public void attack(Pokemon enemy, String attackType) {
         System.out.println("\nPokemon " + getName() + " attacks " + enemy.getName() + " with " + getMoveType() + " move " + getZMove());
 
-        if (attackType.equalsIgnoreCase("special")) {
-            enemy.decreaseHp(getSpecialAttackPower());
+        if (attackType.equalsIgnoreCase("special") && (getSpecialAttackPower() - enemy.getSpecialDefensePower()) > 0) {
+            enemy.decreaseHp(getSpecialAttackPower() - enemy.getSpecialDefensePower());
         }
-        else if (attackType.equalsIgnoreCase("normal")) {
-            enemy.decreaseHp(getAttackPower());
+        else if (attackType.equalsIgnoreCase("normal") && (getSpecialAttackPower() - enemy.getSpecialDefensePower()) > 0) {
+            enemy.decreaseHp(getAttackPower() - enemy.getDefensePower());
         }
     }
 

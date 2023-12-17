@@ -5,7 +5,7 @@ public class ElectricPokemon extends Pokemon {
     }
 
     public ElectricPokemon(int collectionNumber, String name, int grade, int pe, String zMove, String moveType) {
-        super(collectionNumber, name, grade, pe, zMove, moveType, "ELCTRIC");
+        super(collectionNumber, name, grade, pe, zMove, moveType, "ELECTRIC");
     }
 
     // Methods
