@@ -277,8 +277,6 @@ public class Driver {
             }
         } while (!validInput2);
 
-
-
     }
 
     public static void startBattle(Pokemon player, List<Pokemon> enemy, Scanner scanner) {

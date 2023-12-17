@@ -22,7 +22,7 @@ public class FirePokemon extends Pokemon {
             else
                 attackPower = getSpecialAttackPower() - enemy.getSpecialDefensePower();
             if (attackPower < 0)
-                attackPower = 0;                
+                attackPower = 0;
             enemy.decreaseHp(attackPower);
         }
         else if (attackType.equalsIgnoreCase("normal")) {
