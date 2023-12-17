@@ -2,15 +2,17 @@ public class Player {
     private String username;
     private int score;
     private int disksInserted;
+    private Pokemon playerPokemon;
 
     // Constructor
     public Player() {
     }
 
-    public Player(String username, int score, int disksInserted) {
+    public Player(String username, int score, int disksInserted, Pokemon playerPokemon) {
         this.username = username;
         this.score = score;
         this.disksInserted = disksInserted;
+        this.playerPokemon = playerPokemon;
     }
     
     // Getters and Setters
@@ -36,6 +38,14 @@ public class Player {
 
     public int getDisksInserted() {
         return disksInserted;
+    }
+
+    public void setPlayerPokemon(Pokemon playerPokemon) {
+        this.playerPokemon = playerPokemon;
+    }
+
+    public Pokemon getPlayerPokemon() {
+        return playerPokemon;
     }
 
     // Other methods

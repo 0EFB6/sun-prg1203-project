@@ -15,18 +15,21 @@ public class PoisonPokemon extends Pokemon {
 
         double attackPower;
         if (attackType.equalsIgnoreCase("special")) {
-            if (enemy.getType().equalsIgnoreCase("posion"))
-                attackPower = getSpecialAttackPower() * 0.5;
+            if (enemy.getType().equalsIgnoreCase("poison"))
+                attackPower = getSpecialAttackPower() * 0.5 - enemy.getSpecialDefensePower();
             else
-                attackPower = getSpecialAttackPower();
-
+                attackPower = getSpecialAttackPower() - enemy.getSpecialDefensePower();
+            if (attackPower < 0)
+                attackPower = 0;
             enemy.decreaseHp(attackPower);
         }
         else if (attackType.equalsIgnoreCase("normal")) {
-            if (enemy.getType().equalsIgnoreCase("posion"))
-                attackPower = getAttackPower() * 0.5;
+            if (enemy.getType().equalsIgnoreCase("poison"))
+                attackPower = getAttackPower() * 0.5 - enemy.getDefensePower();
             else
-                attackPower = getAttackPower();
+                attackPower = getAttackPower() - enemy.getDefensePower();
+            if (attackPower < 0)
+                attackPower = 0;
             enemy.decreaseHp(attackPower);
         }
     }

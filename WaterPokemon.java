@@ -16,21 +16,24 @@ public class WaterPokemon extends Pokemon {
         double attackPower = 0;
         if (attackType.equalsIgnoreCase("special")) {
             if (enemy.getType().equalsIgnoreCase("fire"))
-                attackPower = getSpecialAttackPower() * 2;
+                attackPower = getSpecialAttackPower() * 2 - enemy.getSpecialDefensePower();
             else if (enemy.getType().equalsIgnoreCase("water"))
-                attackPower = getSpecialAttackPower() * 0.5;
+                attackPower = getSpecialAttackPower() * 0.5 - enemy.getSpecialDefensePower();
             else
-                attackPower = getSpecialAttackPower();
-
+                attackPower = getSpecialAttackPower() - enemy.getSpecialDefensePower();
+            if (attackPower < 0)
+                attackPower = 0;
             enemy.decreaseHp(attackPower);
         }
         else if (attackType.equalsIgnoreCase("normal")) {
             if (enemy.getType().equalsIgnoreCase("fire"))
-                attackPower = getAttackPower() * 2;
+                attackPower = getAttackPower() * 2 - enemy.getDefensePower();
             else if (enemy.getType().equalsIgnoreCase("water"))
-                attackPower = getAttackPower() * 0.5;
+                attackPower = getAttackPower() * 0.5 - enemy.getDefensePower();
             else
-                attackPower = getAttackPower();
+                attackPower = getAttackPower() - enemy.getDefensePower();
+            if (attackPower < 0)
+                attackPower = 0;
             enemy.decreaseHp(attackPower);
         }
     }
