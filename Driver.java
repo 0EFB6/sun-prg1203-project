@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -202,11 +203,28 @@ public class Driver {
 
         if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() <= 0)
         {
-            System.out.println("Select a pokemon to catch: ");
-            System.out.println("1. " + enemy.get(0).getName());
-            System.out.println("2. " + enemy.get(1).getName());
-            System.out.print("Enter your choice (1 or 2): ");
-            pokemonChoice = scanner.nextInt();
+            do {
+                try {
+                    System.out.println("Select a pokemon to catch: ");
+                    System.out.println("1. " + enemy.get(0).getName());
+                    System.out.println("2. " + enemy.get(1).getName());
+                    System.out.print("Enter your choice (1 or 2): ");
+                    pokemonChoice = scanner.nextInt();
+                
+                    if (pokemonChoice < 1 || pokemonChoice > 2) {
+                        throw new IllegalArgumentException(); // Throw an exception for invalid input
+                    }
+                
+                }
+                catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.nextLine(); // Clear the input buffer
+                }
+                catch (IllegalArgumentException e) {
+                    System.out.println("Invalid choice. Please enter 1 or 2.");
+                    scanner.nextLine(); // Clear the input buffer
+                }
+            } while (pokemonChoice < 1 || pokemonChoice > 2);
         }
         else if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() > 0)
             pokemonChoice = 1;
