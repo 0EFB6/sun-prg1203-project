@@ -6,3 +6,7 @@
 - [x] Player's pokemon wont appear as enemy again as it will cause conflicts (both side descrease hp in the same time)
 - [x] Add on defense function
 - [x] Allow player to chose normal attack or special attack
+
+## Stats
+
+**More than `1000` lines of Java codes**
