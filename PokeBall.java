@@ -1,5 +1,3 @@
-import java.util.Random;
-
 public class PokeBall {
     public enum PokeballType {
         POKE_BALL, GREAT_BALL, ULTRA_BALL, MASTER_BALL

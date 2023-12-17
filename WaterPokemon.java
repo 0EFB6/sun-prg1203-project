@@ -11,9 +11,9 @@ public class WaterPokemon extends Pokemon {
     // Methods
     @Override
     public void attack(Pokemon enemy, String attackType) {
-        System.out.println("Pokemon " + getName() + " attacks " + enemy.getName() + " with " + getMoveType() + " move " + getZMove());
+        System.out.println("\nPokemon " + getName() + " attacks " + enemy.getName() + " with " + getMoveType() + " move " + getZMove());
 
-        double attackPower;
+        double attackPower = 0;
         if (attackType.equalsIgnoreCase("special")) {
             if (enemy.getType().equalsIgnoreCase("fire"))
                 attackPower = getSpecialAttackPower() * 2;
@@ -33,8 +33,13 @@ public class WaterPokemon extends Pokemon {
                 attackPower = getAttackPower();
             enemy.decreaseHp(attackPower);
         }
+    }
 
+    public void printEnemy(Pokemon enemy) {
         System.out.println("Enemy " + enemy.getName() + " has " + enemy.getHp() + " HP left");
+    }
+
+    public void printPlayer() {
         System.out.println("You have " + getHp() + " HP left");
     }
 }

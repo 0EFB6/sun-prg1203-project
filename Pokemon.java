@@ -148,7 +148,7 @@ public class Pokemon {
     }
 
     public void attack(Pokemon enemy, String attackType) {
-        System.out.println("Pokemon " + getName() + " attacks " + enemy.getName() + " with " + getMoveType() + " move " + getZMove());
+        System.out.println("\nPokemon " + getName() + " attacks " + enemy.getName() + " with " + getMoveType() + " move " + getZMove());
 
         if (attackType.equalsIgnoreCase("special")) {
             enemy.decreaseHp(getSpecialAttackPower());
@@ -156,9 +156,17 @@ public class Pokemon {
         else if (attackType.equalsIgnoreCase("normal")) {
             enemy.decreaseHp(getAttackPower());
         }
+    }
 
+    public void printEnemy(Pokemon enemy) {
         System.out.println("Enemy " + enemy.getName() + " has " + enemy.getHp() + " HP left");
+    }
+
+    public void printPlayer() {
         System.out.println("You have " + getHp() + " HP left");
     }
 
+    public double getPokemonHp() {
+        return stats.getHp();
+    }
 }

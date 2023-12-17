@@ -8,123 +8,111 @@ public class Driver {
     public static void main(String[] args) {
         Random random = new Random();
         Scanner scanner = new Scanner(System.in);
-
-        // PokeBall pb1 = new PokeBall("Wilson");
-        // System.out.println(pb1);
-
-        // Catch c1 = new Catch(pb1, true, 10.1);
-        // System.out.println(c1);
-
-        printStartMenu();
         
         ArrayList<Pokemon> pokemons = new ArrayList<>();
         initPokemon(pokemons);
-        for (Pokemon pokemon : pokemons) {
-            System.out.println(pokemon);
-        }
-
-        PokeBall pokeBall = new PokeBall();
-        System.out.println(pokeBall);
-
-        GreatBall greatBall = new GreatBall();
-        System.out.println(greatBall);
-
-        UltraBall ultraBall = new UltraBall();
-        System.out.println(ultraBall);
-
-        MasterBall masterBall = new MasterBall();
-        System.out.println(masterBall);
-
-
-        pokemons.get(0).setStats(new Stats(15, 4, 4, 3, 3, 4));
-        pokemons.get(1).setStats(new Stats(20, 4, 5, 4, 4, 5));
-        pokemons.get(2).setStats(new Stats(15, 3, 3, 4, 4, 3));
-        pokemons.get(3).setStats(new Stats(20, 4, 4, 5, 5, 4));
-        pokemons.get(4).setStats(new Stats(25, 5, 5, 6, 7, 5));
-        pokemons.get(5).setStats(new Stats(15, 2, 2, 3, 2, 3));
-        pokemons.get(6).setStats(new Stats(15, 2, 2, 4, 2, 2));
-        pokemons.get(7).setStats(new Stats(10, 3, 1, 2, 1, 4));
-        pokemons.get(8).setStats(new Stats(10, 4, 2, 3, 3, 5));
-        pokemons.get(9).setStats(new Stats(10, 3, 2, 2, 2, 3));
-        pokemons.get(10).setStats(new Stats(15, 5, 3, 3, 3, 4));
-        pokemons.get(11).setStats(new Stats(15, 4, 3, 3, 3, 6));
-        pokemons.get(12).setStats(new Stats(20, 6, 6, 4, 5, 7));
-        pokemons.get(13).setStats(new Stats(10, 4, 1, 4, 1, 2));
-        pokemons.get(14).setStats(new Stats(15, 5, 2, 5, 2, 4));
-        pokemons.get(15).setStats(new Stats(15, 3, 3, 3, 2, 3));
-        // System.out.println(pokemons.get(0).getStats());
-
-        for (Pokemon pokemon : pokemons) {
-            System.out.println(pokemon.getStats());
-        }
-
-
-
-        System.out.println("\n==========================================================================================================");
-        System.out.println("==========================================================================================================\n");
-
-        ArrayList<Pokemon> shufflePokemons = new ArrayList<>(pokemons);
-        Collections.shuffle(shufflePokemons);
-        // Select the first 3 elements after shuffling
-        List<Pokemon> selectedPokemons = shufflePokemons.subList(0, Math.min(shufflePokemons.size(), 3));
-        // Display selected elements
-        for (Pokemon elem : selectedPokemons) {
-            System.out.println("Selected element: " + elem);
-        }
-
-
-        System.out.println("Catch a Pokemon!");
-        System.out.printf("1. %s [%d]\n", selectedPokemons.get(0).getName(), selectedPokemons.get(0).getCollectionNumber());
-        System.out.printf("2. %s [%d]\n", selectedPokemons.get(1).getName(), selectedPokemons.get(1).getCollectionNumber());
-        System.out.printf("3. %s [%d]\n", selectedPokemons.get(2).getName(), selectedPokemons.get(2).getCollectionNumber());
-
-        int pokemonCatch;
-        boolean validInput = false;
-        Pokemon playerSelected = null;
-        do {
-            System.out.print("Enter your choice (1-3): ");
-            try {
-                pokemonCatch = scanner.nextInt();
-                if (pokemonCatch >= 1 && pokemonCatch <= 3)
-                {
-                    validInput = true;
-                    playerSelected = selectedPokemons.get(pokemonCatch - 1);
-                    selectedPokemons.remove(pokemonCatch - 1);
-                }
-                else
-                    System.out.println("Enter integers ranging from 1 to 3 ONLY!");
-            }
-            catch (Exception e) {
-                System.out.println("Enter integers ranging from 1 to 3 ONLY!");
-                scanner.nextLine(); // Clear the input buffer
-            }
-        } while (!validInput);
-
-        System.out.println("You have selected " + playerSelected.getName() + "!");
-        for (Pokemon elem : selectedPokemons) {
-            System.out.println("Selected element: " + elem);
-        }
+        initPokemonStats(pokemons);
         
-        System.out.println("It's time for battle! Get ready!");
+        ArrayList<Pokemon> shufflePokemons = new ArrayList<>(pokemons);
+        ArrayList<Pokemon> shufflePokemons2 = new ArrayList<>(pokemons);
+        Collections.shuffle(shufflePokemons);
+
+        List<Pokemon> randomThreePokemons = shufflePokemons.subList(0, Math.min(shufflePokemons.size(), 3));
+        List<Pokemon> enemyPokemons = shufflePokemons2.subList(0, Math.min(shufflePokemons2.size(), 2));
+
+
+        Pokemon playerSelected = catchOneOfThreePokemon(randomThreePokemons);
+        
+        System.out.println("\nIt's time for battle! Get ready!");
         System.out.println("You have selected " + playerSelected.getName() + "!");
-        System.out.println("Your first opponent is " + selectedPokemons.get(0).getName() + "!");
-        System.out.println("Your second opponent is " + selectedPokemons.get(1).getName() + "!");
+        System.out.println("Your first opponent is " + enemyPokemons.get(0).getName() + "!");
+        System.out.println("Your second opponent is " + enemyPokemons.get(1).getName() + "!");
 
         String startBattle;
         do {
             System.out.print("Start battle? [Y/N]");
             startBattle = scanner.next();
             if (startBattle.equalsIgnoreCase("Y")) {
+                System.out.println("\n");
                 System.out.println("Battle started!");
-                System.out.println("First opponent: " + selectedPokemons.get(0));
-                System.out.println("Second opponent is " + selectedPokemons.get(1));
+                System.out.println("First opponent is " + enemyPokemons.get(0));
+                System.out.println("Second opponent is " + enemyPokemons.get(1));
                 System.out.println("\nYour Pokemon: " + playerSelected);
 
                 // Battle here
 
+                while (playerSelected.getPokemonHp() > 0 && (randomThreePokemons.get(0).getPokemonHp() > 0 || randomThreePokemons.get(1).getPokemonHp() > 0)) {
+                    System.out.println("\nYour Pokemon: " + playerSelected.getName());
+                    System.out.println("Choose an enemy to attack:");
+                    System.out.println("1. " + randomThreePokemons.get(0).getName() + " (HP: " +       randomThreePokemons.get(0).getPokemonHp() + ")");
+                    System.out.println("2. " + randomThreePokemons.get(1).getName() + " (HP: " +       randomThreePokemons.get(1).getPokemonHp() + ")");
+                    System.out.print("Enter your choice (1 or 2): ");
+
+                    try {
+                        int choice = scanner.nextInt();
+
+                        if (choice == 1 || choice == 2) {
+                            Pokemon selectedEnemy = randomThreePokemons.get(choice - 1);
+                            if (selectedEnemy.getPokemonHp() <= 0) {
+                                System.out.println("Enemy has died. Try again.\n");
+                                continue;
+                            }
+                            playerSelected.attack(selectedEnemy, "special");
+
+                            // Display updated stats
+                            playerSelected.printPlayer();
+                            playerSelected.printEnemy(randomThreePokemons.get(0));
+                            playerSelected.printEnemy(randomThreePokemons.get(1));
+                            System.out.println("\n");
+
+                            // Random enemy attacks the player
+                            if (randomThreePokemons.get(0).getPokemonHp() > 0 && randomThreePokemons.get  (1).  getPokemonHp() > 0)
+                            {
+                                Pokemon randomEnemy = randomThreePokemons.get(random.nextInt(2));
+
+                                randomEnemy.attack(playerSelected, "special");
+
+                                // Display updated stats
+                                playerSelected.printPlayer();
+                                playerSelected.printEnemy(randomThreePokemons.get(0));
+                                playerSelected.printEnemy(randomThreePokemons.get(1));
+                            }
+                            else if (randomThreePokemons.get(0).getPokemonHp() > 0 || randomThreePokemons.    get (1).getPokemonHp() > 0)
+                            {
+                                if (randomThreePokemons.get(0).getPokemonHp() > 0)
+                                    randomThreePokemons.get(0).attack(playerSelected,      "special");
+                                else if (randomThreePokemons.get(1).getPokemonHp() > 0)
+                                    randomThreePokemons.get(1).attack(playerSelected,      "special");
+
+                                // Display updated stats
+                                playerSelected.printPlayer();
+                                playerSelected.printEnemy(randomThreePokemons.get(0));
+                                playerSelected.printEnemy(randomThreePokemons.get(1));
+                            }
+                        }
+                        else {
+                            System.out.println("Invalid choice. Try again.\n");
+                        }
+                    }
+                    catch (Exception e) {
+                        System.out.println("Enter integers 1 or 2 ONLY!");
+                        scanner.nextLine(); // Clear the input buffer
+                    }
+                }
+
+                if (playerSelected.getPokemonHp() <= 0) {
+                    System.out.println("You lose. Game Over!");
+                }
+                else {
+                    System.out.println("You win! Congratulations!!!");
+                }
+
+                // Bettle End
+
+                System.out.println("\n");
                 System.out.println("Battle ended!");
-                System.out.println("You have won the battle!");
-                System.out.println("Use a Pokeball to catch " + selectedPokemons.get(0).getName() + "!");
+
+                System.out.println("Use a Pokeball to catch " + enemyPokemons.get(0).getName() + "!");
                 System.out.print("Select a pokeball? [Y/N]");
                 String selectPokeball = scanner.next();
                 if (selectPokeball.equalsIgnoreCase("Y")) {
@@ -164,7 +152,7 @@ public class Driver {
                                         catchPokeball = new Catch(new PokeBall(), 100);
                                         break;
                                 }
-                                catchPokeball.catchPokeball(selectedPokemons.get(0));
+                                catchPokeball.catchPokeball(randomThreePokemons.get(0));
                             }
                             else
                                 System.out.println("Enter integers ranging from 1 to 4 ONLY!");
@@ -192,25 +180,8 @@ public class Driver {
 
         
 
-        FirePokemon firePokemon = new FirePokemon(1, "Charmander", 1, 10, "Fire Fang", "FIRE");
-        firePokemon.setStats(new Stats(15, 2, 3, 3, 3, 4));
-        System.out.println(selectedPokemons.get(random.nextInt(2)));
-        System.out.println(firePokemon);
-        firePokemon.attack(selectedPokemons.get(random.nextInt(2)), "special");
 
-
-        Pokemon temporaryEnemy = selectedPokemons.get(random.nextInt(2));
-        System.out.println(temporaryEnemy);
-        temporaryEnemy.attack(firePokemon, "special");
-
-        System.out.println(selectedPokemons.get(0));
-        System.out.println(selectedPokemons.get(1));
-        System.out.println(firePokemon);
-
-        
         scanner.close();
-
-
     }
 
     public static void initPokemon(ArrayList<Pokemon> pokemons) {
@@ -236,11 +207,56 @@ public class Driver {
         
     }
 
-    public static void printStartMenu() {
-        System.out.println("Welcome to Pokemon Ga-Ole!");
-        System.out.println("1. Start Game");
-        System.out.println("2. Exit");
-
-
+    public static void initPokemonStats(ArrayList<Pokemon> pokemons) {
+        pokemons.get(0).setStats(new Stats(15, 4, 4, 3, 3, 4));
+        pokemons.get(1).setStats(new Stats(20, 4, 5, 4, 4, 5));
+        pokemons.get(2).setStats(new Stats(15, 3, 3, 4, 4, 3));
+        pokemons.get(3).setStats(new Stats(20, 4, 4, 5, 5, 4));
+        pokemons.get(4).setStats(new Stats(25, 5, 5, 6, 7, 5));
+        pokemons.get(5).setStats(new Stats(15, 2, 2, 3, 2, 3));
+        pokemons.get(6).setStats(new Stats(15, 2, 2, 4, 2, 2));
+        pokemons.get(7).setStats(new Stats(10, 3, 1, 2, 1, 4));
+        pokemons.get(8).setStats(new Stats(10, 4, 2, 3, 3, 5));
+        pokemons.get(9).setStats(new Stats(10, 3, 2, 2, 2, 3));
+        pokemons.get(10).setStats(new Stats(15, 5, 3, 3, 3, 4));
+        pokemons.get(11).setStats(new Stats(15, 4, 3, 3, 3, 6));
+        pokemons.get(12).setStats(new Stats(20, 6, 6, 4, 5, 7));
+        pokemons.get(13).setStats(new Stats(10, 4, 1, 4, 1, 2));
+        pokemons.get(14).setStats(new Stats(15, 5, 2, 5, 2, 4));
+        pokemons.get(15).setStats(new Stats(15, 3, 3, 3, 2, 3));
     }
+
+    public static Pokemon catchOneOfThreePokemon (List<Pokemon> pokemons) {
+        int pokemonCatch;
+        boolean validInput = false;
+        Pokemon playerSelected = null;
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Catch a Pokemon!");
+        System.out.printf("1. %s [%d]\n", pokemons.get(0).getName(), pokemons.get(0).getCollectionNumber());
+        System.out.printf("2. %s [%d]\n", pokemons.get(1).getName(), pokemons.get(1).getCollectionNumber());
+        System.out.printf("3. %s [%d]\n", pokemons.get(2).getName(), pokemons.get(2).getCollectionNumber());
+        
+        do {
+            System.out.print("Enter your choice (1-3): ");
+            try {
+                pokemonCatch = input.nextInt();
+                if (pokemonCatch >= 1 && pokemonCatch <= 3)
+                {
+                    validInput = true;
+                    playerSelected = pokemons.get(pokemonCatch - 1);
+                }
+                else
+                    System.out.println("Enter integers ranging from 1 to 3 ONLY!");
+            }
+            catch (Exception e) {
+                System.out.println("Enter integers ranging from 1 to 3 ONLY!");
+                input.nextLine(); // Clear the input buffer
+            }
+        } while (!validInput);
+
+        input.close();
+        return playerSelected;
+    }
+
 }
