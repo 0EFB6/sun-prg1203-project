@@ -176,7 +176,7 @@ public class Pokemon {
     }
 
     public void printPlayer() {
-        System.out.println("\n[YOUR CURRENT HP] " + getName() + " -- " + getHp());
+        System.out.println("[YOUR CURRENT HP] " + getName() + " -- " + getHp());
     }
 
     public double getPokemonHp() {
