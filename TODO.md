@@ -1,6 +1,8 @@
 # To-Do List
 
 - [ ] Improve CLI user interface
+- [ ] Fix looping issue after selecting a pokemon from three
+- [ ] Fix congrats message after winning/losing a battle
 - [x] Fix score issue (updatePlayScore function)
 - [x] Allow player to have 2 pokemons for battle
 - [x] Add more pokemons (Total got 20)
