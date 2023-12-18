@@ -148,7 +148,7 @@ public class Pokemon {
     }
 
     public void attack(Pokemon enemy, String attackType) {
-        System.out.println("\nPokemon " + getName() + " attacks " + enemy.getName() + " with " + getMoveType() + " move " + getZMove());
+        System.out.println(getName() + " ATTACK " + enemy.getName() + " with " + getMoveType() + " move " + getZMove() + "!");
 
         if (attackType.equalsIgnoreCase("special") && (getSpecialAttackPower() - enemy.getSpecialDefensePower()) > 0) {
             enemy.decreaseHp(getSpecialAttackPower() - enemy.getSpecialDefensePower());
@@ -158,12 +158,25 @@ public class Pokemon {
         }
     }
 
+    public boolean validateAttack(Pokemon enemy, String attackType) {
+        double attackPower = 0;
+
+        if (attackType.equalsIgnoreCase("special") && (getSpecialAttackPower() - enemy.getSpecialDefensePower()) > 0)
+            attackPower = getSpecialAttackPower() - enemy.getSpecialDefensePower();
+        else if (attackType.equalsIgnoreCase("normal") && (getSpecialAttackPower() - enemy.getSpecialDefensePower()) > 0)
+            attackPower = getAttackPower() - enemy.getDefensePower();
+        
+        if (attackPower > 0)
+            return true;
+        return false;
+    }
+
     public void printEnemy(Pokemon enemy) {
-        System.out.println("Enemy " + enemy.getName() + " has " + enemy.getHp() + " HP left");
+        System.out.println("[OPPONENT's CURRENT HP] " + enemy.getName() + " -- " + enemy.getHp());
     }
 
     public void printPlayer() {
-        System.out.println("You have " + getHp() + " HP left");
+        System.out.println("\n[YOUR CURRENT HP] " + getName() + " -- " + getHp());
     }
 
     public double getPokemonHp() {

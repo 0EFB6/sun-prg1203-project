@@ -1,5 +1,10 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
@@ -8,14 +13,23 @@ import java.util.Scanner;
 public class Driver {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        String username;
+        boolean validBattle = false;
+
+        username = login(scanner);
         
         ArrayList<Pokemon> pokemons = new ArrayList<>();
         initPokemon(pokemons);
         initPokemonStats(pokemons);
-        Player player = new Player("Player", 0, 0, catchOneOfThreePokemon(pokemons, scanner));
-        List<Pokemon> enemyPokemons = initEnemyPokemons(pokemons, player.getPlayerPokemon());
+        Player player = new Player("Player", 0, catchOneOfThreePokemon(pokemons, scanner));
+        List<Pokemon> enemyPokemons = null;
+        while (!validBattle)
+        {
+            enemyPokemons = initEnemyPokemons(pokemons, player.getPlayerPokemon());
+            validBattle = validateBattle(player.getPlayerPokemon(), enemyPokemons);
+        }
         startBattle(player.getPlayerPokemon(), enemyPokemons, scanner);
-
+        updatePlayerScore(username, 71);
         scanner.close();
     }
 
@@ -79,9 +93,9 @@ public class Driver {
         List<Pokemon> pokemons = shufflePokemons.subList(0, Math.min(shufflePokemons.size(), 3));
 
         System.out.println("Catch a Pokemon!");
-        System.out.printf("1. %s [%d]\n", pokemons.get(0).getName(), pokemons.get(0).getCollectionNumber());
-        System.out.printf("2. %s [%d]\n", pokemons.get(1).getName(), pokemons.get(1).getCollectionNumber());
-        System.out.printf("3. %s [%d]\n", pokemons.get(2).getName(), pokemons.get(2).getCollectionNumber());
+        System.out.printf("1. %s [%s]\n", pokemons.get(0).getName(), pokemons.get(0).getType());
+        System.out.printf("2. %s [%s]\n", pokemons.get(1).getName(), pokemons.get(1).getType());
+        System.out.printf("3. %s [%s]\n", pokemons.get(2).getName(), pokemons.get(2).getType());
         
         do {
             System.out.print("Enter your choice (1-3): ");
@@ -100,99 +114,9 @@ public class Driver {
                 scanner.nextLine(); // Clear the input buffer
             }
         } while (!validInput);
+        clearTerminal();
 
         return playerSelected;
-    }
-
-    public static boolean battle(Pokemon player, List<Pokemon> enemy, Scanner scanner) {
-        Random random = new Random();
-        String attackType;
-
-        while (player.getPokemonHp() > 0 && (enemy.get(0).getPokemonHp() > 0 || enemy.get(1).getPokemonHp() > 0)) {
-                    System.out.println("\nYour Pokemon: " + player.getName());
-                    System.out.println("Choose an enemy to attack:");
-                    System.out.println("1. " + enemy.get(0).getName() + " (HP: " +       enemy.get(0).getPokemonHp() + ")");
-                    System.out.println("2. " + enemy.get(1).getName() + " (HP: " +       enemy.get(1).getPokemonHp() + ")");
-                    System.out.print("Enter your choice (1 or 2): ");
-
-                    try {
-                        int choice = scanner.nextInt();
-
-                        if (choice == 1 || choice == 2) {
-                            Pokemon selectedEnemy = enemy.get(choice - 1);
-                            if (selectedEnemy.getPokemonHp() <= 0) {
-                                System.out.println("Enemy has died. Try again.\n");
-                                continue;
-                            }
-
-                            System.out.println();
-                            System.out.println("1. Normal Attack [N]");
-                            System.out.println("2. Special Attack [S]");
-                            System.out.print("Enter your attack type [N/S]: ");
-                            attackType = scanner.next();
-
-                            if (attackType.equalsIgnoreCase("s"))
-                                player.attack(selectedEnemy, "special");
-                            else if (attackType.equalsIgnoreCase("n"))
-                                player.attack(selectedEnemy, "normal");
-                            else
-                                continue;
-
-                            // Display updated stats
-                            player.printPlayer();
-                            player.printEnemy(enemy.get(0));
-                            player.printEnemy(enemy.get(1));
-                            System.out.println("\n");
-
-                            if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() <= 0)
-                            {
-                                System.out.println("You win haha! Congratulations!!!");
-                                return true;
-                            }
-
-                            // Random enemy attacks the player
-                            if (enemy.get(0).getPokemonHp() > 0 && enemy.get(1).getPokemonHp() > 0)
-                            {
-                                Pokemon randomEnemy = enemy.get(random.nextInt(2));
-
-                                randomEnemy.attack(player, "special");
-
-                                // Display updated stats
-                                player.printPlayer();
-                                player.printEnemy(enemy.get(0));
-                                player.printEnemy(enemy.get(1));
-                            }
-                            else if (enemy.get(0).getPokemonHp() > 0 || enemy.get(1).getPokemonHp() > 0)
-                            {
-                                if (enemy.get(0).getPokemonHp() > 0)
-                                    enemy.get(0).attack(player, "special");
-                                else if (enemy.get(1).getPokemonHp() > 0)
-                                    enemy.get(1).attack(player, "special");
-
-                                // Display updated stats
-                                player.printPlayer();
-                                player.printEnemy(enemy.get(0));
-                                player.printEnemy(enemy.get(1));
-                            }
-                        }
-                        else {
-                            System.out.println("Invalid choice. Try again.\n");
-                        }
-                    }
-                    catch (Exception e) {
-                        System.out.println("Enter integers 1 or 2 ONLY!");
-                        scanner.nextLine(); // Clear the input buffer
-                    }
-        }
-
-        if (player.getPokemonHp() <= 0 && enemy.get(0).getPokemonHp() > 0 && enemy.get(1).getPokemonHp() > 0)
-        {
-            System.out.println("You lose. Game Over!");
-            return false;
-        }
-        
-        System.out.println("You win! Congratulations!!!");
-        return true;
     }
 
     public static void  catchPokemon(List<Pokemon> enemy, Scanner scanner) {
@@ -227,17 +151,37 @@ public class Driver {
             } while (pokemonChoice < 1 || pokemonChoice > 2);
         }
         else if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() > 0)
+        {
+            System.out.println();
+            System.out.println("You may only catch one pokemon as you only defeated " + enemy.get(0).getName() + "!");
             pokemonChoice = 1;
+        }
         else if (enemy.get(1).getPokemonHp() <= 0 && enemy.get(0).getPokemonHp() > 0)
+        {
+            System.out.println();
+            System.out.println("You may only catch one pokemon as you only defeated " + enemy.get(1).getName() + "!");
             pokemonChoice = 2;
+        }
         System.out.println();
         System.out.println("Use a Pokeball to catch " + enemy.get(pokemonChoice - 1).getName() + "!");
         System.out.println();
-        System.out.println("Select a pokeball: ");
-        System.out.println("1. Pokeball");
-        System.out.println("2. Greatball");
-        System.out.println("3. Ultraball");
-        System.out.println("4. Masterball");
+        System.out.println("[System is selecting a random Pokeball...]");
+        System.out.println();
+
+        try {
+            Thread.sleep(3000);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        int randomPokeball = new Random().nextInt(4);
+        catchPokeball = new Catch(new MasterBall(), 25);
+        System.out.println("Pokeball " + catchPokeball.getPokeBall().getBallType() + " selected!");
+
+        // System.out.println("1. Pokeball");
+        // System.out.println("2. Greatball");
+        // System.out.println("3. Ultraball");
+        // System.out.println("4. Masterball");
         
         do {
             System.out.print("Enter your choice (1-4): ");
@@ -279,13 +223,140 @@ public class Driver {
 
     }
 
+    public static boolean validateBattle(Pokemon player, List<Pokemon> enemy) {
+        if ((player.validateAttack(enemy.get(0), "normal")
+            || player.validateAttack(enemy.get(0), "special"))
+            && 
+            (player.validateAttack(enemy.get(1), "normal")
+            || player.validateAttack(enemy.get(1), "special"))
+            &&
+            (enemy.get(0).validateAttack(player, "normal")
+            || enemy.get(0).validateAttack(player, "special"))
+            &&
+            (enemy.get(1).validateAttack(player, "normal")
+            || enemy.get(1).validateAttack(player, "special")))
+            return true;
+        return false;
+    }
+
+    public static boolean battle(Pokemon player, List<Pokemon> enemy, Scanner scanner) {
+        Random random = new Random();
+        String attackType;
+
+        while (player.getPokemonHp() > 0 && (enemy.get(0).getPokemonHp() > 0 || enemy.get(1).getPokemonHp() > 0)) {
+                    
+                    System.out.println();
+                    System.out.println("1. " + enemy.get(0).getName() + " (HP: " + enemy.get(0).getPokemonHp() + ")");
+                    System.out.println("2. " + enemy.get(1).getName() + " (HP: " + enemy.get(1).getPokemonHp() + ")");
+                    System.out.print("Select an enemy to attack [1/2]: ");
+
+                    try {
+                        int choice = scanner.nextInt();
+
+                        if (choice == 1 || choice == 2) {
+                            Pokemon selectedEnemy = enemy.get(choice - 1);
+                            if (selectedEnemy.getPokemonHp() <= 0) {
+                                System.out.println();
+                                System.out.println("Enemy has died. Try again.");
+                                continue;
+                            }
+
+                            System.out.println();
+                            System.out.println("1. Normal Attack [N]");
+                            System.out.println("2. Special Attack [S]");
+                            System.out.print("Select an attack type [N/S]: ");
+                            attackType = scanner.next();
+
+                            clearTerminal();
+
+                            System.out.print("[YOU ---> ENEMY]\n\n");
+                            if (attackType.equalsIgnoreCase("s"))
+                                player.attack(selectedEnemy, "special");
+                            else if (attackType.equalsIgnoreCase("n"))
+                                player.attack(selectedEnemy, "normal");
+                            else
+                                continue;
+                            
+                            // Display updated stats
+                            // player.printPlayer();
+                            // player.printEnemy(enemy.get(0));
+                            // player.printEnemy(enemy.get(1));
+                            
+
+                            if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() <= 0)
+                            {
+                                System.out.println("You win haha! Congratulations!!!");
+                                return true;
+                            }
+
+                            // Random enemy attacks the player
+                            int randomEnemyAttack = random.nextInt(2);
+                            if (enemy.get(0).getPokemonHp() > 0 && enemy.get(1).getPokemonHp() > 0)
+                            {
+                                Pokemon randomEnemy = enemy.get(random.nextInt(2));
+
+                                if (randomEnemyAttack == 0)
+                                    randomEnemy.attack(player, "normal");
+                                else if (randomEnemyAttack == 1)
+                                    randomEnemy.attack(player, "special");
+
+                                // Display updated stats
+                                player.printPlayer();
+                                player.printEnemy(enemy.get(0));
+                                player.printEnemy(enemy.get(1));
+                            }
+                            else if (enemy.get(0).getPokemonHp() > 0 || enemy.get(1).getPokemonHp() > 0)
+                            {
+                                if (enemy.get(0).getPokemonHp() > 0)
+                                {
+                                    if (randomEnemyAttack == 0)
+                                        enemy.get(0).attack(player, "normal");
+                                    else if (randomEnemyAttack == 1)
+                                        enemy.get(0).attack(player, "special");
+                                }
+                                else if (enemy.get(1).getPokemonHp() > 0)
+                                {
+                                    if (randomEnemyAttack == 0)
+                                        enemy.get(1).attack(player, "normal");
+                                    else if (randomEnemyAttack == 1)
+                                        enemy.get(1).attack(player, "special");
+                                }
+
+                                // Display updated stats
+                                player.printPlayer();
+                                player.printEnemy(enemy.get(0));
+                                player.printEnemy(enemy.get(1));
+
+                            }
+                        }
+                        else {
+                            System.out.println("Invalid choice. Try again.\n");
+                        }
+                    }
+                    catch (Exception e) {
+                        System.out.println("\nEnter integers 1 or 2 ONLY!");
+                        scanner.nextLine(); // Clear the input buffer
+                    }
+        }
+
+        if (player.getPokemonHp() <= 0 && enemy.get(0).getPokemonHp() > 0 && enemy.get(1).getPokemonHp() > 0)
+        {
+            System.out.println("You lose. Game Over!");
+            return false;
+        }
+        
+        System.out.println("You win! Congratulations!!!");
+        return true;
+    }
+
     public static void startBattle(Pokemon player, List<Pokemon> enemy, Scanner scanner) {
         String startBattle;
         
-        System.out.println("\nIt's time for battle! Get ready!");
-        System.out.println("You have selected " + player.getName() + "!");
-        System.out.println("Your first opponent is " + enemy.get(0).getName() + "!");
-        System.out.println("Your second opponent is " + enemy.get(1).getName() + "!");
+        System.out.println("It's time for battle! Get ready!");
+        System.out.println();
+        System.out.println("[Your Selection] " + player.getName() + "\n");
+        System.out.println("[Opponent 1] " + enemy.get(0).getName());
+        System.out.println("[Opponent 2] " + enemy.get(1).getName() + "\n");
 
         do {
             System.out.print("Start battle? [Y/N]");
@@ -293,14 +364,43 @@ public class Driver {
 
             if (startBattle.equalsIgnoreCase("Y"))
             {
+                clearTerminal();
+                System.out.println("Battle started!\n");
+                System.out.println("[Opponent 1] " + enemy.get(0).getName());
+                System.out.println("zMove: " + enemy.get(0).getZMove());
+                System.out.println("Type: " + enemy.get(0).getType());
+                System.out.println("HP: " + enemy.get(0).getPokemonHp());
+                System.out.println("Attack: " + enemy.get(0).getAttackPower());
+                System.out.println("Defense: " + enemy.get(0).getDefensePower());
+                System.out.println("Special Attack: " + enemy.get(0).getSpecialAttackPower());
+                System.out.println("Special Defense: " + enemy.get(0).getSpecialDefensePower());
                 System.out.println();
-                System.out.println("Battle started!");
-                System.out.println("First opponent is " + enemy.get(0));
-                System.out.println("Second opponent is " + enemy.get(1));
-                System.out.println("\nYour " + player);
+
+                System.out.println("[Opponent 2] " + enemy.get(1).getName());
+                System.out.println("zMove: " + enemy.get(1).getZMove());
+                System.out.println("Type: " + enemy.get(1).getType());
+                System.out.println("HP: " + enemy.get(1).getPokemonHp());
+                System.out.println("Attack: " + enemy.get(1).getAttackPower());
+                System.out.println("Defense: " + enemy.get(1).getDefensePower());
+                System.out.println("Special Attack: " + enemy.get(1).getSpecialAttackPower());
+                System.out.println("Special Defense: " + enemy.get(1).getSpecialDefensePower());
+                System.out.println();
+
+                System.out.println("-------------------------------");
+                System.out.println("  Your Pokemon:  " + player.getName());
+                System.out.println("-------------------------------");
+                System.out.println("zMove: " + player.getZMove());
+                System.out.println("Type: " + player.getType());
+                System.out.println("HP: " + player.getPokemonHp());
+                System.out.println("Attack: " + player.getAttackPower());
+                System.out.println("Defense: " + player.getDefensePower());
+                System.out.println("Special Attack: " + player.getSpecialAttackPower());
+                System.out.println("Special Defense: " + player.getSpecialDefensePower());
+                System.out.println("\n");
 
                 // Battle
                 boolean result = battle(player, enemy, scanner);
+                clearTerminal();
                 System.out.println("Battle ended!");
 
                 // Catch Pokemon
@@ -308,8 +408,105 @@ public class Driver {
                     catchPokemon(enemy, scanner);                
             }
             else if (startBattle.equalsIgnoreCase("N"))
-                System.out.println("Battle cancelled! Game ended.");
+                System.out.println("\nBattle cancelled! Game ended.");
+            else
+                System.out.println("Invalid input. Try again.");
             
         } while (!(startBattle.equalsIgnoreCase("Y") || startBattle.equalsIgnoreCase("N")));
+    }
+
+    public static String login(Scanner scanner) {
+        String username;
+
+        System.out.println("Welcome to Pokemon Battle!");
+        System.out.println("Please login to continue.");
+        System.out.println();
+        System.out.print("Username: ");
+        username = scanner.next();
+        clearTerminal();
+        System.out.println("[" + username + "] " + "Login successful!");
+        System.out.println();
+        return username;
+    }
+
+    public static void updatePlayerScore(String username, int currentScore) {
+        File file = new File("playerScoreList.txt");
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        List<Player> player = new ArrayList<>();
+
+        try (Scanner fileScanner = new Scanner(file)) {
+            while (fileScanner.hasNext()) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split(";");
+                String existingUsername = parts[0];
+                int existingScore = Integer.parseInt(parts[1]);
+                player.add(new Player(existingUsername, existingScore));
+            }
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        boolean found = false;
+
+        for (Player playerScore : player) {
+            if (playerScore.getUsername().equals(username)) {
+                found = true;
+                if (currentScore > playerScore.getScore()) {
+                    playerScore.setScore(currentScore);
+                    System.out.println("Congratulations! Your new high score is: " + currentScore);
+                }
+                else {
+                    System.out.println("Your current score " + currentScore + " is not higher than your previous high score " + playerScore.getScore() + ", thus, your high score in the leaderboard remains unchanged.");
+                }
+                break;
+            }
+        }
+
+        if (!found) {
+            player.add(new Player(username, currentScore));
+            System.out.println("Congratulations! Your new high score is: " + currentScore);
+        }
+
+        // Sort the list in descending order based on scores
+        player.sort(Comparator.comparingInt(Player::getScore).reversed());
+
+        // Truncate the list to contain a maximum of 5 player's scores
+        player = player.subList(0, Math.min(player.size(), 5));
+
+        try (FileWriter writer = new FileWriter(file)) {
+            for (Player playerScore : player) {
+                writer.write(playerScore.getUsername() + ";" + playerScore.getScore() + "\n");
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void clearTerminal() {
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win")) {
+            try {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            }
+            catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+        }
     }
 }

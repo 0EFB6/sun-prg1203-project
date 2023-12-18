@@ -11,8 +11,8 @@ public class WaterPokemon extends Pokemon {
     // Methods
     @Override
     public void attack(Pokemon enemy, String attackType) {
-        System.out.println("\nPokemon " + getName() + " attacks " + enemy.getName() + " with " + getMoveType() + " move " + getZMove());
-
+        System.out.println(getName() + " ATTACK " + enemy.getName() + " with " + getMoveType() + " move " + getZMove() + "!");
+        
         double attackPower = 0;
         if (attackType.equalsIgnoreCase("special")) {
             if (enemy.getType().equalsIgnoreCase("fire"))
@@ -38,11 +38,28 @@ public class WaterPokemon extends Pokemon {
         }
     }
 
-    public void printEnemy(Pokemon enemy) {
-        System.out.println("Enemy " + enemy.getName() + " has " + enemy.getHp() + " HP left");
-    }
+    @Override
+    public boolean validateAttack(Pokemon enemy, String attackType) {
+        double attackPower = 0;
 
-    public void printPlayer() {
-        System.out.println("You have " + getHp() + " HP left");
+        if (attackType.equalsIgnoreCase("special")) {
+            if (enemy.getType().equalsIgnoreCase("fire"))
+                attackPower = getSpecialAttackPower() * 2 - enemy.getSpecialDefensePower();
+            else if (enemy.getType().equalsIgnoreCase("water"))
+                attackPower = getSpecialAttackPower() * 0.5 - enemy.getSpecialDefensePower();
+            else
+                attackPower = getSpecialAttackPower() - enemy.getSpecialDefensePower();
+        }
+        else if (attackType.equalsIgnoreCase("normal")) {
+            if (enemy.getType().equalsIgnoreCase("fire"))
+                attackPower = getAttackPower() * 2 - enemy.getDefensePower();
+            else if (enemy.getType().equalsIgnoreCase("water"))
+                attackPower = getAttackPower() * 0.5 - enemy.getDefensePower();
+            else
+                attackPower = getAttackPower() - enemy.getDefensePower();
+        }
+        if (attackPower > 0)
+            return true;
+        return false;
     }
 }

@@ -1,17 +1,21 @@
 public class Player {
     private String username;
     private int score;
-    private int disksInserted;
     private Pokemon playerPokemon;
 
     // Constructor
     public Player() {
     }
 
-    public Player(String username, int score, int disksInserted, Pokemon playerPokemon) {
+    public Player(String username, int score) {
         this.username = username;
         this.score = score;
-        this.disksInserted = disksInserted;
+        this.playerPokemon = null;
+    }
+
+    public Player(String username, int score, Pokemon playerPokemon) {
+        this.username = username;
+        this.score = score;
         this.playerPokemon = playerPokemon;
     }
     
@@ -32,14 +36,6 @@ public class Player {
         return score;
     }
 
-    public void setDisksInserted(int disksInserted) {
-        this.disksInserted = disksInserted;
-    }
-
-    public int getDisksInserted() {
-        return disksInserted;
-    }
-
     public void setPlayerPokemon(Pokemon playerPokemon) {
         this.playerPokemon = playerPokemon;
     }
@@ -53,6 +49,6 @@ public class Player {
     // toString
     @Override
     public String toString() {
-        return String.format("Username: %s, Score: %d, Disks Inserted: %d", username, score, disksInserted);
+        return String.format("Username: %s, Score: %d", username, score);
     }
 }
