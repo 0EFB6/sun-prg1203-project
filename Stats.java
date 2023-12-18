@@ -86,8 +86,4 @@ public class Stats {
     public void decreaseHp(double damage) {
         hp -= damage;
     }
-
-    public void increaseHp(double heal) {
-        hp += heal;
-    }    
 }

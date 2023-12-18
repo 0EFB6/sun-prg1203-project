@@ -64,8 +64,3 @@ public class ElectricPokemon extends Pokemon {
         return false;
     }
 }
-
-
-
-
-        

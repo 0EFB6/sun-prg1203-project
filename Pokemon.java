@@ -127,10 +127,6 @@ public class Pokemon {
         stats.decreaseHp(damage);
     }
 
-    public double getHp() {
-        return stats.getHp();
-    }
-
     public int getAttackPower() {
         return stats.getAttackPower();
     }
@@ -172,11 +168,11 @@ public class Pokemon {
     }
 
     public void printEnemy(Pokemon enemy) {
-        System.out.println("[OPPONENT's CURRENT HP] " + enemy.getName() + " -- " + enemy.getHp());
+        System.out.println("[OPPONENT's CURRENT HP] " + enemy.getName() + " -- " + enemy.getPokemonHp());
     }
 
     public void printPlayer() {
-        System.out.println("[YOUR CURRENT HP] " + getName() + " -- " + getHp());
+        System.out.println("[YOUR CURRENT HP] " + getName() + " -- " + getPokemonHp());
     }
 
     public double getPokemonHp() {
