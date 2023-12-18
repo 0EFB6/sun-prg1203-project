@@ -1,9 +1,10 @@
 # To-Do List
 
+- [ ] Fix score issue (updatePlayScore function)
 - [ ] Allow player to have 2 pokemons for battle
-- [ ] Improve CLI interface
-- [ ] Add more pokemons
-- [ ] Pokeball Inheritence
+- [x] Add more pokemons (Total got 20)
+- [x] Pokeball Inheritence
+- [x] Improve CLI interface
 - [x] Fix attack function to use inheritence instead of main Pokemon Class, got error [FKING main error]
 - [x] Add validation (defense value)
 - [x] Improve Pokeball catch defeated pokemon

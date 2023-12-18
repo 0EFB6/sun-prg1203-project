@@ -34,7 +34,6 @@ public class Driver {
     }
 
     public static void initPokemon(ArrayList<Pokemon> pokemons) {
-
         pokemons.add(new FirePokemon(1, "Charmander", 1, 10, "Fire Fang", "FIRE"));
         pokemons.add(new FirePokemon(2, "Charmeleon", 5, 20, "Flamethrower", "FIRE"));
         pokemons.add(new WaterPokemon(3, "Squirtle", 1, 10, "Water Gun", "WATER"));
@@ -51,9 +50,10 @@ public class Driver {
         pokemons.add(new FightingPokemon(14, "Sandshrew", 1, 10, "Sand Tomb", "FIGHTING"));
         pokemons.add(new FightingPokemon(15, "Sandslash", 5, 20, "Earthquake", "FIGHTING"));
         pokemons.add(new PoisonPokemon(16, "Nidorina", 5, 20, "Double Kick", "POISON"));
-
-
-        
+        pokemons.add(new FirePokemon(17, "Ninetales", 3, 30, "Flash Fire", "FIRE"));
+        pokemons.add(new FirePokemon(18, "Golduck", 4,15, "Cloud Nine", "WATER"));
+        pokemons.add(new WaterPokemon(19, "Mega Blastoise", 5, 20, "Hydro Pump", "WATER"));
+        pokemons.add(new FightingPokemon(20, "Mankey", 5, 20, "Karate Chop", "FIGHTING"));
     }
 
     public static void initPokemonStats(ArrayList<Pokemon> pokemons) {
@@ -73,6 +73,10 @@ public class Driver {
         pokemons.get(13).setStats(new Stats(10, 4, 1, 4, 1, 2));
         pokemons.get(14).setStats(new Stats(15, 5, 2, 5, 2, 4));
         pokemons.get(15).setStats(new Stats(15, 3, 3, 3, 2, 3));
+        pokemons.get(16).setStats(new Stats(25, 5, 5, 5, 6, 6));
+        pokemons.get(17).setStats(new Stats(25, 5, 6, 5, 5, 5));
+        pokemons.get(18).setStats(new Stats(15, 5, 7, 5, 5, 4));
+        pokemons.get(19).setStats(new Stats(10, 4, 2, 2, 2, 4));
     }
 
     public static List<Pokemon> initEnemyPokemons (ArrayList<Pokemon> pokemons, Pokemon player) {
@@ -121,9 +125,7 @@ public class Driver {
 
     public static void  catchPokemon(List<Pokemon> enemy, Scanner scanner) {
         Catch catchPokeball = null;
-        int pokeballChoice = 0;
         int pokemonChoice = 0;
-        boolean validInput2 = false;
 
         if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() <= 0)
         {
@@ -168,58 +170,28 @@ public class Driver {
         System.out.println("[System is selecting a random Pokeball...]");
         System.out.println();
 
+        int randomPokeball = new Random().nextInt(4);
+
+        try {
+            Thread.sleep(1500);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        catchPokeball = new Catch(randomPokeball + 1);
+        System.out.println("Pokeball " + catchPokeball.getPokeBall().getBallType() + " selected!");
+        System.out.println();
+        System.out.println("[Catching in 3 ... 2 ... 1 ...]");
+
         try {
             Thread.sleep(3000);
         }
         catch (InterruptedException e) {
             e.printStackTrace();
         }
-        int randomPokeball = new Random().nextInt(4);
-        catchPokeball = new Catch(new MasterBall(), 25);
-        System.out.println("Pokeball " + catchPokeball.getPokeBall().getBallType() + " selected!");
 
-        // System.out.println("1. Pokeball");
-        // System.out.println("2. Greatball");
-        // System.out.println("3. Ultraball");
-        // System.out.println("4. Masterball");
-        
-        do {
-            System.out.print("Enter your choice (1-4): ");
-            try {
-                pokeballChoice = scanner.nextInt();
-                if (pokeballChoice >= 1 && pokeballChoice <= 4)
-                {
-                    validInput2 = true;
-                    
-                    switch (pokeballChoice) {
-                        case 1:
-                            System.out.println("You have selected Pokeball!");
-                            catchPokeball = new Catch(new PokeBall(), 25);
-                            break;
-                        case 2:
-                            System.out.println("You have selected Greatball!");
-                            catchPokeball = new Catch(new GreatBall(), 50);
-                            break;
-                        case 3:
-                            System.out.println("You have selected Ultraball!");
-                            catchPokeball = new Catch(new UltraBall(), 75);
-                            break;
-                        case 4:
-                            System.out.println("You have selected Masterball!");
-                            catchPokeball = new Catch(new MasterBall(), 100);
-                            break;
-                    }
-                    System.out.println();
-                    catchPokeball.catchPokeball(enemy.get(pokemonChoice - 1));
-                }
-                else
-                    System.out.println("Enter integers ranging from 1 to 4 ONLY!");
-            }
-            catch (Exception e) {
-                System.out.println("Enter integers ranging from 1 to 4 ONLY!" + e);
-                scanner.nextLine(); // Clear the input buffer
-            }
-        } while (!validInput2);
+        catchPokeball.catchPokeball(enemy.get(pokemonChoice - 1));
 
     }
 
@@ -413,6 +385,9 @@ public class Driver {
                 System.out.println("Invalid input. Try again.");
             
         } while (!(startBattle.equalsIgnoreCase("Y") || startBattle.equalsIgnoreCase("N")));
+
+        System.out.println();
+        System.out.println("Game ended! Thank you for playing Pokemon Battle!");
     }
 
     public static String login(Scanner scanner) {
