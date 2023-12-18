@@ -46,8 +46,8 @@
 		    optionPanel.add(optionSubmit);		
 		    add(optionPanel);
 		    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		    // Set the size and visibility\
 		    optionSubmit.addActionListener(this); 
+		    // Set the size and visibility\
 		    setSize(400, 200);
 		    setLocationRelativeTo(null); // set location to middle
 		    setVisible(true);

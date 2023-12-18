@@ -28,6 +28,7 @@ public class Pokemon {
     private String moveType;
     private String type;
     private Stats stats;
+    public String lastAttackInfo;
     
     // Constructor
     public Pokemon() {
@@ -150,7 +151,7 @@ public class Pokemon {
     }
 
     public void attack(Pokemon enemy, String attackType) {
-        System.out.println(getName() + " ATTACK " + enemy.getName() + " with " + getMoveType() + " move " + getZMove() + "!");
+    	lastAttackInfo = (getName() + " ATTACK " + enemy.getName() + " with " + getMoveType() + " move " + getZMove() + "!");
 
         if (attackType.equalsIgnoreCase("special") && (getSpecialAttackPower() - enemy.getSpecialDefensePower()) > 0) {
             enemy.decreaseHp(getSpecialAttackPower() - enemy.getSpecialDefensePower());
@@ -158,6 +159,10 @@ public class Pokemon {
         else if (attackType.equalsIgnoreCase("normal") && (getSpecialAttackPower() - enemy.getSpecialDefensePower()) > 0) {
             enemy.decreaseHp(getAttackPower() - enemy.getDefensePower());
         }
+    }
+    
+    protected String getLastAttackInfo() {
+        return lastAttackInfo;
     }
 
     public boolean validateAttack(Pokemon enemy, String attackType) {

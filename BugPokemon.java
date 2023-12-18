@@ -13,7 +13,7 @@ public class BugPokemon extends Pokemon {
     // Methods
     @Override
     public void attack(Pokemon enemy, String attackType) {
-        System.out.println(getName() + " ATTACK " + enemy.getName() + " with " + getMoveType() + " move " + getZMove() + "!");
+    	lastAttackInfo = getName() + " ATTACK " + enemy.getName() + " with " + getMoveType() + " move " + getZMove() + "!";
 
         double attackPower;
         if (attackType.equalsIgnoreCase("special")) {

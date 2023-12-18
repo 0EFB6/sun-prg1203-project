@@ -7,13 +7,14 @@ public class FirePokemon extends Pokemon {
     }
 
     public FirePokemon(int collectionNumber, String name, int grade, int pe, String zMove, String moveType) {
-        super(collectionNumber, name, grade, pe, zMove, moveType, "FIRE");
+        super(collectionNumber, name, grade, pe, zMove, moveType, "BUG");
     }
 
     // Methods
+
     @Override
     public void attack(Pokemon enemy, String attackType) {
-        System.out.println(getName() + " ATTACK " + enemy.getName() + " with " + getMoveType() + " move " + getZMove() + "!");
+        lastAttackInfo = getName() + " ATTACK " + enemy.getName() + " with " + getMoveType() + " move " + getZMove() + "!";
 
         double attackPower;
         if (attackType.equalsIgnoreCase("special")) {
@@ -60,8 +61,7 @@ public class FirePokemon extends Pokemon {
             else
                 attackPower = getAttackPower() - enemy.getDefensePower();
         }
-        if (attackPower > 0)
-            return true;
-        return false;
+
+        return attackPower > 0;
     }
 }
