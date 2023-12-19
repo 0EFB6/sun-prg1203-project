@@ -27,11 +27,11 @@ public class Driver {
                 int choice = scanner.nextInt();
                 if (choice == 1) {
                     clearTerminal();
-                    startGame();
+                    startGame(scanner);
                 }
                 else if (choice == 2) {
                     clearTerminal();
-                    // viewLeaderboard();
+                    viewLeaderboard();
                 }
                 else if (choice == 3) {
                     clearTerminal();
@@ -52,8 +52,7 @@ public class Driver {
         scanner.close();
     }
 
-    public static void startGame() {
-        Scanner scanner = new Scanner(System.in);
+    public static void startGame(Scanner scanner) {
         String username;
         boolean validBattle = false;
 
@@ -67,7 +66,7 @@ public class Driver {
         Player player = null;
         List<Pokemon> enemyPokemons = null;
         List<Pokemon> playerPokemons = null;
-        player = new Player(username, 0, catchOneOfThreePokemon(pokemons));
+        player = new Player(username, 0, catchOneOfThreePokemon(pokemons, scanner));
 
 
         while (!validBattle)
@@ -77,7 +76,7 @@ public class Driver {
             player.setPlayerPokemon2(playerPokemons.get(1));
             validBattle = validateBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons);
         }
-        startBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons);
+        startBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons, scanner);
         
         if (!(player.getPlayerPokemon1().getPokemonHp() <= 0 && player.getPlayerPokemon2().getPokemonHp() <= 0))
             player.setScore((int) (player.getPlayerPokemon1().getPokemonHp() + player.getPlayerPokemon2().getPokemonHp()));
@@ -92,8 +91,7 @@ public class Driver {
             System.out.println("You lose. Game Over!\nYour score will not be saved!\nQuiting in 3 ... 2 ... 1 ...");
         else
             System.out.println("Your score is: " + player.getScore() + "  System is updating your score...");
-        updatePlayerScore(username, player.getScore());
-        scanner.close();
+        updatePlayerScore(username, player.getScore());   
     }
 
     public static void initPokemon(ArrayList<Pokemon> pokemons) {
@@ -161,8 +159,7 @@ public class Driver {
         return playerPokemons;
     }
 
-    public static Pokemon catchOneOfThreePokemon (ArrayList<Pokemon> pokemonList) {
-        Scanner scanner = new Scanner(System.in);
+    public static Pokemon catchOneOfThreePokemon (ArrayList<Pokemon> pokemonList, Scanner scanner) {
         int pokemonCatch;
         boolean validInput = false;
         Pokemon playerSelected = null;
@@ -194,8 +191,6 @@ public class Driver {
             }
         } while (!validInput);
         clearTerminal();
-        scanner.close();
-
         return playerSelected;
     }
 
@@ -306,8 +301,7 @@ public class Driver {
         return false;
     }
 
-    public static boolean battle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy) {
-        Scanner scanner = new Scanner(System.in);
+    public static boolean battle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy, Scanner scanner) {
         Random random = new Random();
         String attackType;
 
@@ -495,12 +489,10 @@ public class Driver {
         catch (InterruptedException e) {
             e.printStackTrace();
         }
-        scanner.close();
         return true;
     }
 
-    public static void startBattle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy) {
-        Scanner scanner = new Scanner(System.in);
+    public static void startBattle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy, Scanner scanner) {
         String startBattle;
         
         System.out.println("It's time for battle! Get ready!");
@@ -565,7 +557,7 @@ public class Driver {
                 System.out.println("\n");
 
                 // Battle
-                boolean result = battle(playerPokemon1, playerPokemon2, enemy);
+                boolean result = battle(playerPokemon1, playerPokemon2, enemy, scanner);
                 clearTerminal();
                 System.out.println("Battle ended!");
 
@@ -585,8 +577,7 @@ public class Driver {
 
         System.out.println();
         System.out.println("Game ended! Thank you for playing Pokemon Battle!");
-        scanner.close();
-    }
+}
 
     public static String login(Scanner scanner) {
         String username;
@@ -691,5 +682,38 @@ public class Driver {
             pokemon.printPokemonInfo();
         }
         System.out.println("\n===========================END OF LIST==========================");
+    }
+
+    public static void viewLeaderboard() {
+        File file = new File("playerScoreList.txt");
+    
+        if (!file.exists()) {
+            System.out.println("No leaderboard exists yet.");
+            return;
+        }
+    
+        String[] username = new String[5];
+        int[] score = new int[5];
+    
+        try (Scanner fileScanner = new Scanner(file)) {
+            int i = 0;
+            while (fileScanner.hasNext() && i < 5) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split(";");
+                username[i] = parts[0];
+                score[i] = Integer.parseInt(parts[1]);
+                i++;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    
+        System.out.println("Leaderboard\n==============================");
+        System.out.printf("%-20s | %-10s%n", "Username", "Score");
+        System.out.println("-".repeat(30));
+        for (int i = 0; i < 5; i++) {
+            System.out.printf("%-20s | %-10d%n", username[i], score[i]);
+        }
+        System.out.println("================================");
     }
 }
