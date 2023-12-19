@@ -1,0 +1,19 @@
+public enum PokemonType {
+    BUG,
+    DRAGON,
+    ELECTRIC,
+    POISON,
+    PSYCHIC,
+    FIRE,
+    GHOST,
+    ROCK,
+    DARK,
+    FIGHTING,
+    GRASS,
+    GROUND,
+    STEEL,
+    WATER,
+    FLYING,
+    ICE,
+    NORMAL
+}

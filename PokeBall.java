@@ -1,8 +1,5 @@
 public class PokeBall {
-    public enum PokeballType {
-        POKE_BALL, GREAT_BALL, ULTRA_BALL, MASTER_BALL
-    }
-    protected PokeballType ballType;
+    private PokeballType ballType;
 
     // Constructor
     public PokeBall() {
@@ -23,9 +20,7 @@ public class PokeBall {
         this.ballType = type[index];
     }
 
-    // Other methods
-
-    // toString
+    // Methods
     @Override
     public String toString() {
         return String.format("PokeBall [ballType=%s]", ballType);

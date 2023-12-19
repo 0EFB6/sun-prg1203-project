@@ -63,8 +63,8 @@ public class Driver {
         pokemons.add(new WaterPokemon(5, "Blastoise", 10, 30, "Giant Geyser GX", "WATER"));
         pokemons.add(new BugPokemon(6, "Caterpie", 1, 10, "Gnaw", "BUG"));
         pokemons.add(new BugPokemon(7, "Metapod", 5, 20, "Bug Bite", "BUG"));
-        pokemons.add(new Pokemon(8, "Rattata", 1, 10, "Bite", "NORMAL", "NORMAL"));
-        pokemons.add(new Pokemon(9, "Raticate", 5, 20, "Super Fang", "NORMAL", "NORMAL"));
+        pokemons.add(new Pokemon(8, "Rattata", 1, 10, "Bite", "NORMAL", PokemonType.NORMAL));
+        pokemons.add(new Pokemon(9, "Raticate", 5, 20, "Super Fang", "NORMAL", PokemonType.NORMAL));
         pokemons.add(new PoisonPokemon(10, "Ekans", 1, 10, "BITE", "POISON"));
         pokemons.add(new PoisonPokemon(11, "Arbok", 5, 20, "Venomous Fang", "POISON"));
         pokemons.add(new ElectricPokemon(12, "Pikachu", 1, 10, "Thunderbolt", "ELECTRIC"));
@@ -80,7 +80,7 @@ public class Driver {
 
     public static void initPokemonStats(ArrayList<Pokemon> pokemons) {
         pokemons.get(0).setStats(new Stats(15, 4, 4, 2, 3, 4));
-        pokemons.get(1).setStats(new Stats(20, 4, 5, 3, 4, 5));
+        pokemons.get(1).setStats(new Stats(-20, 4, 5, 3, 4, 5));
         pokemons.get(2).setStats(new Stats(15, 3, 3, 3, 4, 3));
         pokemons.get(3).setStats(new Stats(20, 4, 4, 4, 5, 4));
         pokemons.get(4).setStats(new Stats(25, 5, 5, 5, 7, 5));

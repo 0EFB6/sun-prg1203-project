@@ -5,6 +5,9 @@ public class Catch {
     private int pokeballType;
     private int successRate;
 
+    // Constant
+    private static final int SUCCESS_MULTIPLIER = 25;
+
     // Constructor
     public Catch() {
         this.pokeball = null;
@@ -13,9 +16,9 @@ public class Catch {
     }
 
     public Catch(int pokeballType) {
-        setPokeBall(new PokeBall(pokeballType - 1));
+        setPokeBall(new PokeBall(Math.max(pokeballType - 1, 0)));
         setPokeballType(pokeballType);
-        setSuccess(pokeballType);
+        setSuccessRate();
     }
 
     // Getters and Setters
@@ -35,17 +38,15 @@ public class Catch {
         return pokeballType;
     }
 
-    public void setSuccess(int pokellballType) {
-        this.successRate = 25 * pokellballType;
+    public void setSuccessRate() {
+        this.successRate = SUCCESS_MULTIPLIER * pokeballType;
     }
 
-    public int isSuccess() {
+    public int getSuccessRate() {
         return successRate;
     }
 
-    // Other methods
-
-    // toString
+    // Methods
     @Override
     public String toString() {
         return String.format("PokeBall: %s, Success Rate: %d", pokeball, successRate);
