@@ -1,6 +1,6 @@
 # To-Do List
 
-- [ ] Add extra battle as extra function
+- [x] Add extra battle as extra function
 - [x] Improve CLI user interface
 - [x] Fix looping issue after selecting a pokemon from three
 - [x] Fix congrats message after winning/losing a battle
