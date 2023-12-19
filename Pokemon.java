@@ -95,19 +95,18 @@ public class Pokemon {
     public boolean validateAttack(Pokemon enemy, String attackType) {
         return calculateAttackPower(enemy, attackType) > 0;
     }
-    
-    public void printPokemonInfo() {
-        int infoPadding = 25; // Padding for the left side (Pokemon info)
-        int statPadding = 25; // Padding for the right side (Stats)
 
-        System.out.println(" ".repeat(15) + "[INFO]" + " ".repeat(16) + "|" + " ".repeat(10) + "[STAT]");
-        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %.0f%n", "Collection No", getCollectionNumber(), "HP", stats.getHp());
-        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %d%n", "Name", getName(), "Attack", stats.getAttackPower());
-        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %d%n", "Grade", getGrade(), "SpecialAttack", stats.getSpecialAttackPower());
-        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %d%n", "PE", getPe(), "Defense", stats.getDefensePower());
-        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %d%n", "Z-Move", getZMove(), "Defense Attack", stats.getSpecialDefensePower());
-        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %d%n", "Type", getType(), "Speed", stats.getSpeed());
-        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s%n", "Move Type", getMoveType(), "");
-        System.out.println("-".repeat(infoPadding + statPadding + 14));
+    public void printPokemonInfo() {
+        int padding = 20;
+
+        System.out.println(" ".repeat(15) + "[INFO]" + " ".repeat(17) + "|" + " ".repeat(10) + "[STAT]");
+        System.out.printf("%-" + (padding) + "s: %-16s|  %-" + (padding - 2) + "s: %.0f%n", "Collection No", getCollectionNumber(), "HP", stats.getHp());
+        System.out.printf("%-" + (padding) + "s: %-16s|  %-" + (padding - 2) + "s: %d%n", "Name", getName(), "Attack", stats.getAttackPower());
+        System.out.printf("%-" + (padding) + "s: %-16s|  %-" + (padding - 2) + "s: %d%n", "Grade", getGrade(), "SpecialAttack", stats.getSpecialAttackPower());
+        System.out.printf("%-" + (padding) + "s: %-16s|  %-" + (padding - 2) + "s: %d%n", "PE", getPe(), "Defense", stats.getDefensePower());
+        System.out.printf("%-" + (padding) + "s: %-16s|  %-" + (padding - 2) + "s: %d%n", "Z-Move", getZMove(), "Defense Attack", stats.getSpecialDefensePower());
+        System.out.printf("%-" + (padding) + "s: %-16s|  %-" + (padding - 2) + "s: %d%n", "Type", getType(), "Speed", stats.getSpeed());
+        System.out.printf("%-" + (padding) + "s: %-16s|  %-" + (padding - 2) + "s%n", "Move Type", getMoveType(), "");
+        System.out.println("-".repeat(64));
     }
 }
