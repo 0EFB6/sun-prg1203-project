@@ -52,6 +52,11 @@ public class Stats {
             hp -= damage;
     }
 
+    public void increaseHp(double heal) {
+        if (heal > 0)
+            hp += heal;
+    }
+
     private int validateStatValue(int value) {
         return Math.max(value, 0);
     }

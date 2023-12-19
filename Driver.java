@@ -88,7 +88,7 @@ public class Driver {
             player.setScore(-1);
 
         if (player.getScore() == -1)
-            System.out.println("You lose. Game Over!\nYour score will not be saved!\nQuiting in 3 ... 2 ... 1 ...");
+            System.out.println("You lose. Game Over!\nYour score will not be saved!\n");
         else
             System.out.println("Your score is: " + player.getScore() + "  System is updating your score...");
         updatePlayerScore(username, player.getScore());   
@@ -194,8 +194,7 @@ public class Driver {
         return playerSelected;
     }
 
-    public static void  catchPokemon(List<Pokemon> enemy) {
-        Scanner scanner = new Scanner(System.in);
+    public static void  catchPokemon(List<Pokemon> enemy, Scanner scanner) {
         Catch catchPokeball = null;
         int pokemonChoice = 0;
 
@@ -270,7 +269,6 @@ public class Driver {
         }
         else
             System.out.println("[ERROR] Fail to catch pokemon using pokeball!");
-        scanner.close();
     }
 
     public static boolean validateBattle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy) {
@@ -306,178 +304,176 @@ public class Driver {
         String attackType;
 
         while ((playerPokemon1.getPokemonHp() > 0 || playerPokemon2.getPokemonHp() > 0) && (enemy.get(0).getPokemonHp() > 0 || enemy.get(1).getPokemonHp() > 0)) {
+            System.out.println();
+            System.out.println("1. " + enemy.get(0).getName() + " [HP: " + enemy.get(0).getPokemonHp() + "]");
+            System.out.println("2. " + enemy.get(1).getName() + " [HP: " + enemy.get(1).getPokemonHp() + "]");
+            System.out.print("Select an enemy to attack [1/2]: ");
+
+            try {
+                int choice = scanner.nextInt();
+                int choicePlayer = 0;
+
+                if (choice == 1 || choice == 2) {
+                    Pokemon selectedEnemy = enemy.get(choice - 1);
+                    if (selectedEnemy.getPokemonHp() <= 0) {
+                        System.out.println();
+                        System.out.println("Enemy has died. Try again.");
+                        continue;
+                    }
+
                     System.out.println();
-                    System.out.println("1. " + enemy.get(0).getName() + " [HP: " + enemy.get(0).getPokemonHp() + "]");
-                    System.out.println("2. " + enemy.get(1).getName() + " [HP: " + enemy.get(1).getPokemonHp() + "]");
-                    System.out.print("Select an enemy to attack [1/2]: ");
+                    System.out.println("1. " + playerPokemon1.getName() + " [HP: " + playerPokemon1.getPokemonHp() + "]");
+                    System.out.println("2. " + playerPokemon2.getName() + " [HP: " + playerPokemon2.getPokemonHp() + "]");
+                    System.out.print("Select a pokemon to use [1/2]: ");
+                    choicePlayer = scanner.nextInt();
 
-                    try {
-                        int choice = scanner.nextInt();
-                        int choicePlayer = 0;
+                    System.out.println();
+                    System.out.println("1. Normal Attack [N]");
+                    System.out.println("2. Special Attack [S]");
+                    System.out.print("Select an attack type [N/S]: ");
+                    attackType = scanner.next();
 
-                        if (choice == 1 || choice == 2) {
-                            Pokemon selectedEnemy = enemy.get(choice - 1);
-                            if (selectedEnemy.getPokemonHp() <= 0) {
-                                System.out.println();
-                                System.out.println("Enemy has died. Try again.");
-                                continue;
-                            }
+                    clearTerminal();
 
-                            System.out.println();
-                            System.out.println("1. " + playerPokemon1.getName() + " [HP: " + playerPokemon1.getPokemonHp() + "]");
-                            System.out.println("2. " + playerPokemon2.getName() + " [HP: " + playerPokemon2.getPokemonHp() + "]");
-                            System.out.print("Select a pokemon to use [1/2]: ");
-                            choicePlayer = scanner.nextInt();
-
-                            System.out.println();
-                            System.out.println("1. Normal Attack [N]");
-                            System.out.println("2. Special Attack [S]");
-                            System.out.print("Select an attack type [N/S]: ");
-                            attackType = scanner.next();
-
-                            clearTerminal();
-
-                            if (choicePlayer == 1 && playerPokemon1.getPokemonHp() <= 0)
-                            {
-                                System.out.println("Your pokemon has died. Try again.");
-                                continue;
-                            }
-                            else if (choicePlayer == 2 && playerPokemon2.getPokemonHp() <= 0)
-                            {
-                                System.out.println("Your pokemon has died. Try again.");
-                                continue;
-                            }
-                            if (attackType.equalsIgnoreCase("s"))
-                            {
-                                System.out.print("[YOU ---> ENEMY] ");
-                                if (choicePlayer == 1)
-                                    playerPokemon1.attack(selectedEnemy, "special");
-                                else if (choicePlayer == 2)
-                                    playerPokemon2.attack(selectedEnemy, "special");
-                            }
-                            else if (attackType.equalsIgnoreCase("n"))
-                            {
-                                System.out.print("[YOU ---> ENEMY] ");
-                                if (choicePlayer == 1)
-                                    playerPokemon1.attack(selectedEnemy, "normal");
-                                else if (choicePlayer == 2)
-                                    playerPokemon2.attack(selectedEnemy, "normal");
-                            }
-                            else
-                                continue;
-
-                            // Display updated stats
-                            // player.printPlayer();
-                            // player.printEnemy(enemy.get(0));
-                            // player.printEnemy(enemy.get(1));
-                            
-
-                            if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() <= 0)
-                            {
-                                clearTerminal();
-                                System.out.println("You win! Congratulations!!! Catching pokemon in 3 ... 2 ... 1 ...");
-                                try {
-                                    Thread.sleep(3000);
-                                }
-                                catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                return true;
-                            }
-
-                            // Random enemy attacks the player
-                            int randomEnemyAttack = random.nextInt(2);
-                            int randomEnemyChoice = random.nextInt(2);
-                            System.out.print("[ENEMY ---> YOU] ");
-                            if (enemy.get(0).getPokemonHp() > 0 && enemy.get(1).getPokemonHp() > 0)
-                            {
-                                Pokemon randomEnemy = enemy.get(random.nextInt(2));
-
-                                if (randomEnemyAttack == 0)
-                                {
-                                    if (randomEnemyChoice == 0 && playerPokemon1.getPokemonHp() > 0)
-                                        randomEnemy.attack(playerPokemon1, "normal");
-                                    else if (randomEnemyChoice == 0 && playerPokemon2.getPokemonHp() > 0)
-                                        randomEnemy.attack(playerPokemon2, "normal");
-                                    else if (randomEnemyChoice == 1 && playerPokemon1.getPokemonHp() > 0)
-                                        randomEnemy.attack(playerPokemon1, "normal");
-                                    else if (randomEnemyChoice == 1 && playerPokemon2.getPokemonHp() > 0)
-                                        randomEnemy.attack(playerPokemon2, "normal");
-                                }
-                                else if (randomEnemyAttack == 1)
-                                {
-                                    if (randomEnemyChoice == 0 && playerPokemon1.getPokemonHp() > 0)
-                                        randomEnemy.attack(playerPokemon1, "special");
-                                    else if (randomEnemyChoice == 0 && playerPokemon2.getPokemonHp() > 0)
-                                        randomEnemy.attack(playerPokemon2, "special");
-                                    else if (randomEnemyChoice == 1 && playerPokemon1.getPokemonHp() > 0)
-                                        randomEnemy.attack(playerPokemon1, "special");
-                                    else if (randomEnemyChoice == 1 && playerPokemon2.getPokemonHp() > 0)
-                                        randomEnemy.attack(playerPokemon2, "special");
-                                }
-                                // Display updated stats
-                                System.out.println();
-                                playerPokemon1.printPlayer();
-                                playerPokemon2.printPlayer(); 
-                                playerPokemon1.printEnemy(enemy.get(0));
-                                playerPokemon1.printEnemy(enemy.get(1));
-                            }
-                            else if (enemy.get(0).getPokemonHp() > 0 || enemy.get(1).getPokemonHp() > 0)
-                            {
-                                if (enemy.get(0).getPokemonHp() > 0)
-                                {
-                                    if (randomEnemyAttack == 0 && playerPokemon1.getPokemonHp() > 0)
-                                        enemy.get(0).attack(playerPokemon1, "normal");
-                                    else if (randomEnemyAttack == 0 && playerPokemon2.getPokemonHp() > 0)
-                                        enemy.get(0).attack(playerPokemon2, "normal");
-                                    else if (randomEnemyAttack == 1 && playerPokemon1.getPokemonHp() > 0)
-                                        enemy.get(0).attack(playerPokemon1, "special");
-                                    else if (randomEnemyAttack == 1 && playerPokemon2.getPokemonHp() > 0)
-                                        enemy.get(0).attack(playerPokemon2, "special");
-                                }
-                                else if (enemy.get(1).getPokemonHp() > 0)
-                                {
-                                    if (randomEnemyAttack == 0 && playerPokemon1.getPokemonHp() > 0)
-                                        enemy.get(1).attack(playerPokemon1, "normal");
-                                    else if (randomEnemyAttack == 0 && playerPokemon2.getPokemonHp() > 0)
-                                        enemy.get(1).attack(playerPokemon2, "normal");
-                                    else if (randomEnemyAttack == 1 && playerPokemon1.getPokemonHp() > 0)
-                                        enemy.get(1).attack(playerPokemon1, "special");
-                                    else if (randomEnemyAttack == 1 && playerPokemon2.getPokemonHp() > 0)
-                                        enemy.get(1).attack(playerPokemon2, "special");
-                                }
-
-                                // Display updated stats
-                                System.out.println();
-                                playerPokemon1.printPlayer();
-                                playerPokemon2.printPlayer();
-                                System.out.println();
-                                playerPokemon1.printEnemy(enemy.get(0));
-                                playerPokemon1.printEnemy(enemy.get(1));
-
-                            }
-                        }
-                        else {
-                            System.out.println("Invalid choice. Try again.\n");
-                        }
+                    if (choicePlayer == 1 && playerPokemon1.getPokemonHp() <= 0)
+                    {
+                        System.out.println("Your pokemon has died. Try again.");
+                        continue;
                     }
-                    catch (Exception e) {
-                        System.out.println("\nEnter integers 1 or 2 ONLY!");
-                        scanner.nextLine(); // Clear the input buffer
+                    else if (choicePlayer == 2 && playerPokemon2.getPokemonHp() <= 0)
+                    {
+                        System.out.println("Your pokemon has died. Try again.");
+                        continue;
                     }
+                    if (attackType.equalsIgnoreCase("s"))
+                    {
+                        System.out.print("[YOU ---> ENEMY] ");
+                        if (choicePlayer == 1)
+                            playerPokemon1.attack(selectedEnemy, "special");
+                        else if (choicePlayer == 2)
+                            playerPokemon2.attack(selectedEnemy, "special");
+                    }
+                    else if (attackType.equalsIgnoreCase("n"))
+                    {
+                        System.out.print("[YOU ---> ENEMY] ");
+                        if (choicePlayer == 1)
+                            playerPokemon1.attack(selectedEnemy, "normal");
+                        else if (choicePlayer == 2)
+                            playerPokemon2.attack(selectedEnemy, "normal");
+                    }
+                    else
+                        continue;
+
+                    // Display updated stats
+                    // player.printPlayer();
+                    // player.printEnemy(enemy.get(0));
+                    // player.printEnemy(enemy.get(1));
+                    
+
+                    if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() <= 0)
+                    {
+                        clearTerminal();
+                        System.out.println("You win! Congratulations!!! Catching pokemon in 3 ... 2 ... 1 ...");
+                        try {
+                            Thread.sleep(3000);
+                        }
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return true;
+                    }
+
+                    // Random enemy attacks the player
+                    int randomEnemyAttack = random.nextInt(2);
+                    int randomEnemyChoice = random.nextInt(2);
+                    System.out.print("[ENEMY ---> YOU] ");
+                    if (enemy.get(0).getPokemonHp() > 0 && enemy.get(1).getPokemonHp() > 0)
+                    {
+                        Pokemon randomEnemy = enemy.get(random.nextInt(2));
+
+                        if (randomEnemyAttack == 0)
+                        {
+                            if (randomEnemyChoice == 0 && playerPokemon1.getPokemonHp() > 0)
+                                randomEnemy.attack(playerPokemon1, "normal");
+                            else if (randomEnemyChoice == 0 && playerPokemon2.getPokemonHp() > 0)
+                                randomEnemy.attack(playerPokemon2, "normal");
+                            else if (randomEnemyChoice == 1 && playerPokemon1.getPokemonHp() > 0)
+                                randomEnemy.attack(playerPokemon1, "normal");
+                            else if (randomEnemyChoice == 1 && playerPokemon2.getPokemonHp() > 0)
+                                randomEnemy.attack(playerPokemon2, "normal");
+                        }
+                        else if (randomEnemyAttack == 1)
+                        {
+                            if (randomEnemyChoice == 0 && playerPokemon1.getPokemonHp() > 0)
+                                randomEnemy.attack(playerPokemon1, "special");
+                            else if (randomEnemyChoice == 0 && playerPokemon2.getPokemonHp() > 0)
+                                randomEnemy.attack(playerPokemon2, "special");
+                            else if (randomEnemyChoice == 1 && playerPokemon1.getPokemonHp() > 0)
+                                randomEnemy.attack(playerPokemon1, "special");
+                            else if (randomEnemyChoice == 1 && playerPokemon2.getPokemonHp() > 0)
+                                randomEnemy.attack(playerPokemon2, "special");
+                        }
+                        // Display updated stats
+                        System.out.println();
+                        playerPokemon1.printPlayer();
+                        playerPokemon2.printPlayer(); 
+                        playerPokemon1.printEnemy(enemy.get(0));
+                        playerPokemon1.printEnemy(enemy.get(1));
+                    }
+                    else if (enemy.get(0).getPokemonHp() > 0 || enemy.get(1).getPokemonHp() > 0)
+                    {
+                        if (enemy.get(0).getPokemonHp() > 0)
+                        {
+                            if (randomEnemyAttack == 0 && playerPokemon1.getPokemonHp() > 0)
+                                enemy.get(0).attack(playerPokemon1, "normal");
+                            else if (randomEnemyAttack == 0 && playerPokemon2.getPokemonHp() > 0)
+                                enemy.get(0).attack(playerPokemon2, "normal");
+                            else if (randomEnemyAttack == 1 && playerPokemon1.getPokemonHp() > 0)
+                                enemy.get(0).attack(playerPokemon1, "special");
+                            else if (randomEnemyAttack == 1 && playerPokemon2.getPokemonHp() > 0)
+                                enemy.get(0).attack(playerPokemon2, "special");
+                        }
+                        else if (enemy.get(1).getPokemonHp() > 0)
+                        {
+                            if (randomEnemyAttack == 0 && playerPokemon1.getPokemonHp() > 0)
+                                enemy.get(1).attack(playerPokemon1, "normal");
+                            else if (randomEnemyAttack == 0 && playerPokemon2.getPokemonHp() > 0)
+                                enemy.get(1).attack(playerPokemon2, "normal");
+                            else if (randomEnemyAttack == 1 && playerPokemon1.getPokemonHp() > 0)
+                                enemy.get(1).attack(playerPokemon1, "special");
+                            else if (randomEnemyAttack == 1 && playerPokemon2.getPokemonHp() > 0)
+                                enemy.get(1).attack(playerPokemon2, "special");
+                        }
+
+                        // Display updated stats
+                        System.out.println();
+                        playerPokemon1.printPlayer();
+                        playerPokemon2.printPlayer();
+                        System.out.println();
+                        playerPokemon1.printEnemy(enemy.get(0));
+                        playerPokemon1.printEnemy(enemy.get(1));
+                    }
+                }
+                else {
+                    System.out.println("Invalid choice. Try again.\n");
+                }
+            }
+            catch (Exception e) {
+                System.out.println("\nEnter integers 1 or 2 ONLY!");
+                scanner.nextLine(); // Clear the input buffer
+            }
         }
 
         if (playerPokemon1.getPokemonHp() <= 0 && playerPokemon2.getPokemonHp() <= 0 && (enemy.get(0).getPokemonHp() > 0 || enemy.get(1).getPokemonHp() > 0))
         {
             clearTerminal();
-            System.out.println("You lose. Game Over! Quiting in 3 ... 2 ... 1 ...");
+            System.out.println("You lose. Game Over!");
             try {
                 Thread.sleep(3000);
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            scanner.close();
             return false;
         }
         
@@ -559,11 +555,47 @@ public class Driver {
                 // Battle
                 boolean result = battle(playerPokemon1, playerPokemon2, enemy, scanner);
                 clearTerminal();
+                
+                if (!result)
+                {
+                    System.out.println("You failed to defeat any pokemon! Don't worry, extra battle may occur!");
+                    try {
+                        Thread.sleep(1500);
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Random random = new Random();
+                    int extraBattle = random.nextInt(2);
+                    if (extraBattle == 1)
+                    {
+                        System.out.println("Extra battle occured! Starting in 3 ... 2 ... 1 ...");
+                        try {
+                            Thread.sleep(3000);
+                        }
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        playerPokemon1.increaseHp(6);
+                        playerPokemon2.increaseHp(6);
+                        result = battle(playerPokemon1, playerPokemon2, enemy, scanner);
+                    }
+                    else
+                    {
+                        System.out.println("No extra battle occured! So sad...");
+                        try {
+                            Thread.sleep(2000);
+                        }
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
                 System.out.println("Battle ended!");
 
                 // Catch Pokemon
                 if (result)
-                    catchPokemon(enemy);                
+                    catchPokemon(enemy, scanner);                
             }
             else if (startBattle.equalsIgnoreCase("N"))
             {

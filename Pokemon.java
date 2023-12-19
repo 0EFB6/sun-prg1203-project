@@ -53,6 +53,10 @@ public class Pokemon {
         stats.decreaseHp(damage);
     }
 
+    public void increaseHp(double heal) {
+        stats.increaseHp(heal);
+    }
+
     public int getAttackPower() {
         return stats.getAttackPower();
     }
