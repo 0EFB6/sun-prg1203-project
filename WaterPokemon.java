@@ -9,6 +9,7 @@ public class WaterPokemon extends Pokemon {
     }
 
     // Methods
+    @Override
     public double calculateAttackPower(Pokemon enemy, String attackType) {
         double finalAttackPower = 0;
         double attackPower = (attackType.equalsIgnoreCase("special")) ? getSpecialAttackPower() : getAttackPower();
