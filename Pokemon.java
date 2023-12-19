@@ -95,4 +95,14 @@ public class Pokemon {
     public boolean validateAttack(Pokemon enemy, String attackType) {        
         return calculateAttackPower(enemy, attackType) > 0;
     }
+
+    public void printPokemonInfo() {
+        System.out.println("Name: " + getName());
+        System.out.println("Type: " + getType());
+        System.out.println("Grade: " + getGrade());
+        System.out.println("PE: " + getPe());
+        System.out.println("Z-Move: " + getZMove());
+        System.out.println("Move Type: " + getMoveType());
+        System.out.println("Stats: " + getStats());
+    }
 }

@@ -13,6 +13,47 @@ import java.util.Scanner;
 public class Driver {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        boolean isExit = false;
+        while (!isExit) {
+            System.out.println();
+            System.out.println("Welcome to Pokemon Ga-Ole!");
+            System.out.println("1. Start Game");
+            System.out.println("2. View Leaderboard");
+            System.out.println("3. List all Pokemons");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice [1-4]: ");
+            try {
+                int choice = scanner.nextInt();
+                if (choice == 1) {
+                    clearTerminal();
+                    startGame();
+                }
+                else if (choice == 2) {
+                    clearTerminal();
+                    // viewLeaderboard();
+                }
+                else if (choice == 3) {
+                    clearTerminal();
+                    listAllPokemons();
+                }
+                else if (choice == 4) {
+                    System.out.println("Thank you for playing Pokemon Battle!");
+                    isExit = true;
+                }
+                else
+                    System.out.println("Invalid number. Please enter 1, 2, 3, or 4.\n");
+            }
+            catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number ranging from 1 to 4.\n");
+                scanner.nextLine();
+            }
+        }
+        scanner.close();
+    }
+
+    public static void startGame() {
+        Scanner scanner = new Scanner(System.in);
         String username;
         boolean validBattle = false;
 
@@ -26,7 +67,7 @@ public class Driver {
         Player player = null;
         List<Pokemon> enemyPokemons = null;
         List<Pokemon> playerPokemons = null;
-        player = new Player(username, 0, catchOneOfThreePokemon(pokemons, scanner));
+        player = new Player(username, 0, catchOneOfThreePokemon(pokemons));
 
 
         while (!validBattle)
@@ -36,7 +77,7 @@ public class Driver {
             player.setPlayerPokemon2(playerPokemons.get(1));
             validBattle = validateBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons);
         }
-        startBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons, scanner);
+        startBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons);
         
         if (!(player.getPlayerPokemon1().getPokemonHp() <= 0 && player.getPlayerPokemon2().getPokemonHp() <= 0))
             player.setScore((int) (player.getPlayerPokemon1().getPokemonHp() + player.getPlayerPokemon2().getPokemonHp()));
@@ -120,7 +161,8 @@ public class Driver {
         return playerPokemons;
     }
 
-    public static Pokemon catchOneOfThreePokemon (ArrayList<Pokemon> pokemonList, Scanner scanner) {
+    public static Pokemon catchOneOfThreePokemon (ArrayList<Pokemon> pokemonList) {
+        Scanner scanner = new Scanner(System.in);
         int pokemonCatch;
         boolean validInput = false;
         Pokemon playerSelected = null;
@@ -152,11 +194,13 @@ public class Driver {
             }
         } while (!validInput);
         clearTerminal();
+        scanner.close();
 
         return playerSelected;
     }
 
-    public static void  catchPokemon(List<Pokemon> enemy, Scanner scanner) {
+    public static void  catchPokemon(List<Pokemon> enemy) {
+        Scanner scanner = new Scanner(System.in);
         Catch catchPokeball = null;
         int pokemonChoice = 0;
 
@@ -231,7 +275,7 @@ public class Driver {
         }
         else
             System.out.println("[ERROR] Fail to catch pokemon using pokeball!");
-
+        scanner.close();
     }
 
     public static boolean validateBattle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy) {
@@ -262,7 +306,8 @@ public class Driver {
         return false;
     }
 
-    public static boolean battle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy, Scanner scanner) {
+    public static boolean battle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy) {
+        Scanner scanner = new Scanner(System.in);
         Random random = new Random();
         String attackType;
 
@@ -438,6 +483,7 @@ public class Driver {
             catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            scanner.close();
             return false;
         }
         
@@ -449,10 +495,12 @@ public class Driver {
         catch (InterruptedException e) {
             e.printStackTrace();
         }
+        scanner.close();
         return true;
     }
 
-    public static void startBattle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy, Scanner scanner) {
+    public static void startBattle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy) {
+        Scanner scanner = new Scanner(System.in);
         String startBattle;
         
         System.out.println("It's time for battle! Get ready!");
@@ -517,13 +565,13 @@ public class Driver {
                 System.out.println("\n");
 
                 // Battle
-                boolean result = battle(playerPokemon1, playerPokemon2, enemy, scanner);
+                boolean result = battle(playerPokemon1, playerPokemon2, enemy);
                 clearTerminal();
                 System.out.println("Battle ended!");
 
                 // Catch Pokemon
                 if (result)
-                    catchPokemon(enemy, scanner);                
+                    catchPokemon(enemy);                
             }
             else if (startBattle.equalsIgnoreCase("N"))
             {
@@ -537,8 +585,7 @@ public class Driver {
 
         System.out.println();
         System.out.println("Game ended! Thank you for playing Pokemon Battle!");
-
-        
+        scanner.close();
     }
 
     public static String login(Scanner scanner) {
@@ -633,6 +680,15 @@ public class Driver {
         else {
             System.out.print("\033[H\033[2J");
             System.out.flush();
+        }
+    }
+
+    public static void listAllPokemons() {
+        ArrayList<Pokemon> pokemons = new ArrayList<>();
+        initPokemon(pokemons);
+        initPokemonStats(pokemons);
+        for (Pokemon pokemon : pokemons) {
+            System.out.println(pokemon);
         }
     }
 }
