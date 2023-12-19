@@ -7,47 +7,7 @@ import java.util.Scanner;
 
 public class GameOperation {
     // Methods
-    public static void startGame(Scanner scanner) {
-        String username;
-        boolean validBattle = false;
-
-        username = GameUtil.login(scanner);
-        
-        ArrayList<Pokemon> pokemons = GameInit.initPokemon();
-
-
-        Player player = null;
-        List<Pokemon> enemyPokemons = null;
-        List<Pokemon> playerPokemons = null;
-        player = new Player(username, 0, catchOneOfThreePokemon(pokemons, scanner));
-
-
-        while (!validBattle)
-        {
-            enemyPokemons = GameInit.initEnemyPokemons(pokemons, player.getPlayerPokemon1());
-            playerPokemons = GameInit.initPlayerPokemons(pokemons, enemyPokemons, player.getPlayerPokemon1());
-            player.setPlayerPokemon2(playerPokemons.get(0));
-            validBattle = validateBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons);
-        }
-        startBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons, scanner);
-        
-        if (!(player.getPlayerPokemon1().getPokemonHp() <= 0 && player.getPlayerPokemon2().getPokemonHp() <= 0))
-            player.setScore((int) (player.getPlayerPokemon1().getPokemonHp() + player.getPlayerPokemon2().getPokemonHp()));
-        else if (player.getPlayerPokemon1().getPokemonHp() <= 0 && player.getPlayerPokemon2().getPokemonHp() > 0)
-            player.setScore((int) player.getPlayerPokemon2().getPokemonHp());
-        else if (player.getPlayerPokemon1().getPokemonHp() > 0 && player.getPlayerPokemon2().getPokemonHp() <= 0)
-            player.setScore((int) player.getPlayerPokemon1().getPokemonHp());
-        else
-            player.setScore(-1);
-
-        if (player.getScore() == -1)
-            System.out.println("You lose. Game Over!\nYour score will not be saved!\n");
-        else
-            System.out.println("Your score is: " + player.getScore() + "  System is updating your score...");
-        GameUtil.updatePlayerScore(username, player.getScore());   
-    }
-
-    public static Pokemon catchOneOfThreePokemon (ArrayList<Pokemon> pokemonList, Scanner scanner) {
+    private static Pokemon catchOneOfThreePokemon (ArrayList<Pokemon> pokemonList, Scanner scanner) {
         int pokemonCatch;
         boolean validInput = false;
         Pokemon playerSelected = null;
@@ -57,12 +17,12 @@ public class GameOperation {
         List<Pokemon> pokemons = shufflePokemons.subList(0, Math.min(shufflePokemons.size(), 3));
 
         System.out.println("Catch a Pokemon!");
-        System.out.printf("1. %s [%s]\n", pokemons.get(0).getName(), pokemons.get(0).getType());
-        System.out.printf("2. %s [%s]\n", pokemons.get(1).getName(), pokemons.get(1).getType());
-        System.out.printf("3. %s [%s]\n", pokemons.get(2).getName(), pokemons.get(2).getType());
-        
+        for (int i = 0; i < pokemons.size(); i++) {
+            System.out.printf("%d. %s [%s]\n", i + 1, pokemons.get(i).getName(), pokemons.get(i).getType());
+        }
+
         do {
-            System.out.print("Enter your choice (1-3): ");
+            System.out.print("Enter your choice [1-3]: ");
             try {
                 pokemonCatch = scanner.nextInt();
                 if (pokemonCatch >= 1 && pokemonCatch <= 3)
@@ -75,12 +35,68 @@ public class GameOperation {
             }
             catch (Exception e) {
                 System.out.println("Enter integers ranging from 1 to 3 ONLY!");
-                scanner.nextLine(); // Clear the input buffer
+                scanner.nextLine();
             }
         } while (!validInput);
+
         GameUtil.clearTerminal();
         return playerSelected;
     }
+
+    private static Player initializePlayer(ArrayList<Pokemon> pokemons, Scanner scanner) {
+        String username = GameUtil.login(scanner);
+        Pokemon selectedPokemon = catchOneOfThreePokemon(pokemons, scanner);
+        return new Player(username, 0, selectedPokemon);
+    }
+
+    private static double calculateScore(double player1Hp, double player2Hp) {
+        if (player1Hp <= 0 && player2Hp <= 0)
+            return -1;
+        else if (player1Hp <= 0 && player2Hp > 0)
+            return player2Hp;
+        else if (player1Hp > 0 && player2Hp <= 0)
+            return player1Hp;
+        else
+            return player1Hp + player2Hp;
+    }
+
+    public static void startGame(Scanner scanner) {
+        List<Pokemon> enemyPokemons;
+        List<Pokemon> playerPokemons;
+        ArrayList<Pokemon> pokemons = GameInit.initPokemon();
+        Player player = initializePlayer(pokemons, scanner);
+
+        do {
+            enemyPokemons = GameInit.initEnemyPokemons(pokemons, player.getPlayerPokemon1());
+            playerPokemons = GameInit.initPlayerPokemons(pokemons, enemyPokemons, player.getPlayerPokemon1());
+            player.setPlayerPokemon2(playerPokemons.get(0));
+        } while (!GameValidation.validateBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons));
+
+        startBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons, scanner);
+        
+        double playerPokemon1Hp = player.getPlayerPokemon1().getPokemonHp();
+        double playerPokemon2Hp = player.getPlayerPokemon2().getPokemonHp();
+        player.setScore((int) calculateScore(playerPokemon1Hp, playerPokemon2Hp));
+
+        if (player.getScore() == -1)
+            System.out.println("You lose. Game Over!\nYour score will not be saved!\n");
+        else
+            System.out.println("Your score is: " + player.getScore() + "  System is updating your score...");
+
+        GameUtil.updatePlayerScore(player.getUsername(), player.getScore());   
+    }
+
+    
+
+    
+
+
+
+
+
+
+
+
 
     public static void  catchPokemon(List<Pokemon> enemy, Scanner scanner) {
         Catch catchPokeball = null;
@@ -134,57 +150,18 @@ public class GameOperation {
 
             int randomPokeball = new Random().nextInt(4);
 
-            try {
-                Thread.sleep(1500);
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            GameUtil.wait(1500);
 
             catchPokeball = new Catch(randomPokeball + 1);
             System.out.println("Pokeball " + catchPokeball.getPokeBall().getBallType() + " selected!");
             System.out.println();
             System.out.println("[Catching in 3 ... 2 ... 1 ...]");
-
-            try {
-                Thread.sleep(3000);
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            GameUtil.wait(3000);
 
             catchPokeball.catchPokeball(enemy.get(pokemonChoice - 1));
         }
         else
             System.out.println("[ERROR] Fail to catch pokemon using pokeball!");
-    }
-
-    public static boolean validateBattle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy) {
-        if ((playerPokemon1.validateAttack(enemy.get(0), "normal")
-            || playerPokemon1.validateAttack(enemy.get(0), "special"))
-            && 
-            (playerPokemon1.validateAttack(enemy.get(1), "normal")
-            || playerPokemon1.validateAttack(enemy.get(1), "special"))
-            &&
-            (playerPokemon2.validateAttack(enemy.get(0), "normal")
-            || playerPokemon2.validateAttack(enemy.get(0), "special"))
-            &&
-            (playerPokemon2.validateAttack(enemy.get(1), "normal")
-            || playerPokemon2.validateAttack(enemy.get(1), "special"))
-            &&
-            (enemy.get(0).validateAttack(playerPokemon1, "normal")
-            || enemy.get(0).validateAttack(playerPokemon1, "special"))
-            &&
-            (enemy.get(1).validateAttack(playerPokemon1, "normal")
-            || enemy.get(1).validateAttack(playerPokemon1, "special"))
-            &&
-            (enemy.get(0).validateAttack(playerPokemon2, "normal")
-            || enemy.get(0).validateAttack(playerPokemon2, "special"))
-            &&
-            (enemy.get(1).validateAttack(playerPokemon2, "normal")
-            || enemy.get(1).validateAttack(playerPokemon2, "special")))
-            return true;
-        return false;
     }
 
     public static boolean battle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy, Scanner scanner) {
