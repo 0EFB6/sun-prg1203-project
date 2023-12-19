@@ -36,19 +36,9 @@ public class Pokemon {
 
     public void setCollectionNumber(int collectionNumber) { this.collectionNumber = collectionNumber; }
     public void setName(String name) { this.name = name; }
-    public void setGrade(int grade) { this.grade = grade; }
-    public void setPe(int pe) { this.pe = pe; }
+    public void setGrade(int grade) { this.grade = Math.max(grade, 0); }
+    public void setPe(int pe) { this.pe = Math.max(pe, 0); }
     public void setType(PokemonType type) { this.type = type; }
-
-    // public void setType(String type) {
-    //     try {
-    //         this.type = PokemonType.valueOf(type.toUpperCase());
-    //     }
-    //     catch (IllegalArgumentException e) {
-    //         throw new IllegalArgumentException("Invalid Pokemon type: " + type);
-    //     }
-    // }
-
     public void setZMove(String zMove) { this.zMove = zMove; }
     public void setMoveType(String moveType) { this.moveType = moveType; }
     public void setStats(Stats stats) { this.stats = stats; }
