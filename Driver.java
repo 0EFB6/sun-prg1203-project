@@ -37,7 +37,20 @@ public class Driver {
             validBattle = validateBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons);
         }
         startBattle(player.getPlayerPokemon1(), player.getPlayerPokemon2(), enemyPokemons, scanner);
-        player.setScore((int) (player.getPlayerPokemon1().getPokemonHp() + player.getPlayerPokemon2().getPokemonHp()));
+        
+        if (!(player.getPlayerPokemon1().getPokemonHp() <= 0 && player.getPlayerPokemon2().getPokemonHp() <= 0))
+            player.setScore((int) (player.getPlayerPokemon1().getPokemonHp() + player.getPlayerPokemon2().getPokemonHp()));
+        else if (player.getPlayerPokemon1().getPokemonHp() <= 0 && player.getPlayerPokemon2().getPokemonHp() > 0)
+            player.setScore((int) player.getPlayerPokemon2().getPokemonHp());
+        else if (player.getPlayerPokemon1().getPokemonHp() > 0 && player.getPlayerPokemon2().getPokemonHp() <= 0)
+            player.setScore((int) player.getPlayerPokemon1().getPokemonHp());
+        else
+            player.setScore(-1);
+
+        if (player.getScore() == -1)
+            System.out.println("You lose. Game Over!\nYour score will not be saved!\nQuiting in 3 ... 2 ... 1 ...");
+        else
+            System.out.println("Your score is: " + player.getScore() + "  System is updating your score...");
         updatePlayerScore(username, player.getScore());
         scanner.close();
     }
@@ -66,25 +79,25 @@ public class Driver {
     }
 
     public static void initPokemonStats(ArrayList<Pokemon> pokemons) {
-        pokemons.get(0).setStats(new Stats(15, 4, 4, 3, 3, 4));
-        pokemons.get(1).setStats(new Stats(20, 4, 5, 4, 4, 5));
-        pokemons.get(2).setStats(new Stats(15, 3, 3, 4, 4, 3));
-        pokemons.get(3).setStats(new Stats(20, 4, 4, 5, 5, 4));
-        pokemons.get(4).setStats(new Stats(25, 5, 5, 6, 7, 5));
-        pokemons.get(5).setStats(new Stats(15, 2, 2, 3, 2, 3));
-        pokemons.get(6).setStats(new Stats(15, 2, 2, 4, 2, 2));
-        pokemons.get(7).setStats(new Stats(10, 3, 1, 2, 1, 4));
-        pokemons.get(8).setStats(new Stats(10, 4, 2, 3, 3, 5));
-        pokemons.get(9).setStats(new Stats(10, 3, 2, 2, 2, 3));
-        pokemons.get(10).setStats(new Stats(15, 5, 3, 3, 3, 4));
-        pokemons.get(11).setStats(new Stats(15, 4, 3, 3, 3, 6));
-        pokemons.get(12).setStats(new Stats(20, 6, 6, 4, 5, 7));
-        pokemons.get(13).setStats(new Stats(10, 4, 1, 4, 1, 2));
-        pokemons.get(14).setStats(new Stats(15, 5, 2, 5, 2, 4));
+        pokemons.get(0).setStats(new Stats(15, 4, 4, 2, 3, 4));
+        pokemons.get(1).setStats(new Stats(20, 4, 5, 3, 4, 5));
+        pokemons.get(2).setStats(new Stats(15, 3, 3, 3, 4, 3));
+        pokemons.get(3).setStats(new Stats(20, 4, 4, 4, 5, 4));
+        pokemons.get(4).setStats(new Stats(25, 5, 5, 5, 7, 5));
+        pokemons.get(5).setStats(new Stats(15, 3, 4, 2, 2, 3));
+        pokemons.get(6).setStats(new Stats(15, 3, 4, 3, 2, 2));
+        pokemons.get(7).setStats(new Stats(10, 3, 5, 1, 1, 4));
+        pokemons.get(8).setStats(new Stats(10, 4, 3, 2, 3, 5));
+        pokemons.get(9).setStats(new Stats(10, 3, 2, 1, 2, 3));
+        pokemons.get(10).setStats(new Stats(15, 5, 3, 2, 3, 4));
+        pokemons.get(11).setStats(new Stats(15, 4, 3, 2, 3, 6));
+        pokemons.get(12).setStats(new Stats(20, 6, 6, 3, 5, 7));
+        pokemons.get(13).setStats(new Stats(10, 4, 1, 3, 1, 2));
+        pokemons.get(14).setStats(new Stats(15, 5, 2, 4, 2, 4));
         pokemons.get(15).setStats(new Stats(15, 3, 3, 3, 2, 3));
-        pokemons.get(16).setStats(new Stats(25, 5, 5, 5, 6, 6));
-        pokemons.get(17).setStats(new Stats(25, 5, 6, 5, 5, 5));
-        pokemons.get(18).setStats(new Stats(15, 5, 7, 5, 5, 4));
+        pokemons.get(16).setStats(new Stats(25, 5, 5, 4, 6, 6));
+        pokemons.get(17).setStats(new Stats(25, 5, 6, 4, 5, 5));
+        pokemons.get(18).setStats(new Stats(15, 5, 7, 4, 5, 4));
         pokemons.get(19).setStats(new Stats(10, 4, 2, 2, 2, 4));
     }
 
@@ -285,7 +298,16 @@ public class Driver {
 
                             clearTerminal();
 
-                            
+                            if (choicePlayer == 1 && playerPokemon1.getPokemonHp() <= 0)
+                            {
+                                System.out.println("Your pokemon has died. Try again.");
+                                continue;
+                            }
+                            else if (choicePlayer == 2 && playerPokemon2.getPokemonHp() <= 0)
+                            {
+                                System.out.println("Your pokemon has died. Try again.");
+                                continue;
+                            }
                             if (attackType.equalsIgnoreCase("s"))
                             {
                                 System.out.print("[YOU ---> ENEMY] ");
@@ -304,7 +326,7 @@ public class Driver {
                             }
                             else
                                 continue;
-                            
+
                             // Display updated stats
                             // player.printPlayer();
                             // player.printEnemy(enemy.get(0));
@@ -313,6 +335,7 @@ public class Driver {
 
                             if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() <= 0)
                             {
+                                clearTerminal();
                                 System.out.println("You win! Congratulations!!! Catching pokemon in 3 ... 2 ... 1 ...");
                                 try {
                                     Thread.sleep(3000);
@@ -386,8 +409,10 @@ public class Driver {
                                 }
 
                                 // Display updated stats
+                                System.out.println();
                                 playerPokemon1.printPlayer();
                                 playerPokemon2.printPlayer();
+                                System.out.println();
                                 playerPokemon1.printEnemy(enemy.get(0));
                                 playerPokemon1.printEnemy(enemy.get(1));
 
@@ -403,8 +428,9 @@ public class Driver {
                     }
         }
 
-        if (playerPokemon1.getPokemonHp() <= 0 && playerPokemon2.getPokemonHp() <= 0 && enemy.get(0).getPokemonHp() > 0 && enemy.get(1).getPokemonHp() > 0)
+        if (playerPokemon1.getPokemonHp() <= 0 && playerPokemon2.getPokemonHp() <= 0 && (enemy.get(0).getPokemonHp() > 0 || enemy.get(1).getPokemonHp() > 0))
         {
+            clearTerminal();
             System.out.println("You lose. Game Over! Quiting in 3 ... 2 ... 1 ...");
             try {
                 Thread.sleep(3000);
@@ -415,6 +441,7 @@ public class Driver {
             return false;
         }
         
+        clearTerminal();
         System.out.println("You win! Congratulations!!! Catching pokemon in 3 ... 2 ... 1 ...");
         try {
             Thread.sleep(3000);
@@ -499,7 +526,10 @@ public class Driver {
                     catchPokemon(enemy, scanner);                
             }
             else if (startBattle.equalsIgnoreCase("N"))
+            {
                 System.out.println("\nBattle cancelled! Game ended.");
+                System.exit(0);
+            }
             else
                 System.out.println("Invalid input. Try again.");
             
