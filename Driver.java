@@ -121,7 +121,7 @@ public class Driver {
 
     public static void initPokemonStats(ArrayList<Pokemon> pokemons) {
         pokemons.get(0).setStats(new Stats(15, 4, 4, 2, 3, 4));
-        pokemons.get(1).setStats(new Stats(-20, 4, 5, 3, 4, 5));
+        pokemons.get(1).setStats(new Stats(20, 4, 5, 3, 4, 5));
         pokemons.get(2).setStats(new Stats(15, 3, 3, 3, 4, 3));
         pokemons.get(3).setStats(new Stats(20, 4, 4, 4, 5, 4));
         pokemons.get(4).setStats(new Stats(25, 5, 5, 5, 7, 5));
@@ -688,7 +688,8 @@ public class Driver {
         initPokemon(pokemons);
         initPokemonStats(pokemons);
         for (Pokemon pokemon : pokemons) {
-            System.out.println(pokemon);
+            pokemon.printPokemonInfo();
         }
+        System.out.println("\n===========================END OF LIST==========================");
     }
 }

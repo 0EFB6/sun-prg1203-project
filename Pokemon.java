@@ -92,17 +92,22 @@ public class Pokemon {
         return Math.max(attackPower - defendPower, 0);
     }
 
-    public boolean validateAttack(Pokemon enemy, String attackType) {        
+    public boolean validateAttack(Pokemon enemy, String attackType) {
         return calculateAttackPower(enemy, attackType) > 0;
     }
-
+    
     public void printPokemonInfo() {
-        System.out.println("Name: " + getName());
-        System.out.println("Type: " + getType());
-        System.out.println("Grade: " + getGrade());
-        System.out.println("PE: " + getPe());
-        System.out.println("Z-Move: " + getZMove());
-        System.out.println("Move Type: " + getMoveType());
-        System.out.println("Stats: " + getStats());
+        int infoPadding = 25; // Padding for the left side (Pokemon info)
+        int statPadding = 25; // Padding for the right side (Stats)
+
+        System.out.println(" ".repeat(15) + "[INFO]" + " ".repeat(16) + "|" + " ".repeat(10) + "[STAT]");
+        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %.0f%n", "Collection No", getCollectionNumber(), "HP", stats.getHp());
+        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %d%n", "Name", getName(), "Attack", stats.getAttackPower());
+        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %d%n", "Grade", getGrade(), "SpecialAttack", stats.getSpecialAttackPower());
+        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %d%n", "PE", getPe(), "Defense", stats.getDefensePower());
+        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %d%n", "Z-Move", getZMove(), "Defense Attack", stats.getSpecialDefensePower());
+        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s: %d%n", "Type", getType(), "Speed", stats.getSpeed());
+        System.out.printf("%-" + (infoPadding - 5) + "s:%-16s|  %-"+(statPadding-7)+"s%n", "Move Type", getMoveType(), "");
+        System.out.println("-".repeat(infoPadding + statPadding + 14));
     }
 }
