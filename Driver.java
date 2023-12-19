@@ -38,7 +38,7 @@ public class Driver {
                     listAllPokemons();
                 }
                 else if (choice == 4) {
-                    System.out.println("Thank you for playing Pokemon Battle!");
+                    System.out.println("Thank you for playing Pokemon Ga-Ole!");
                     isExit = true;
                 }
                 else
