@@ -23,13 +23,19 @@ public class Battle_UI extends JFrame implements ActionListener {
     private JLabel userPokemonLabel = null;
     private JLabel userPokemon2Label = null;
     private JLabel yourPokemonHealthLabel = null;
+    private JLabel yourPokemon2HealthLabel = null;
     private JLabel enemy1Label = null;
     private JLabel enemy1HealthLabel = null;
     private JLabel enemy2Label = null;
     private JLabel enemy2HealthLabel = null;
+    private JRadioButton rbEnemy1;
+    private JRadioButton rbEnemy2;
+    private JLabel chooseEnemyLabel;
+    private JLabel chooseAttackLabel = null;
     private ButtonGroup userPokemonGroup = null;
     private JRadioButton rbUserPokemon1;
     private JRadioButton rbUserPokemon2;
+    private JLabel chooseyourpokemon;
     private JRadioButton rbAttack1 = null;  
     private JRadioButton rbAttack2 = null;  
     private JButton choosePokemonButton = null;
@@ -44,6 +50,7 @@ public class Battle_UI extends JFrame implements ActionListener {
     private double Score = 0;
     private boolean isSkillChosen = false;
     private boolean isAttackChosen = false;
+    private boolean isEnemyChosen = true;
 
     public Battle_UI(String username, Pokemon selectedPokemon) {
         this.username = username;
@@ -56,33 +63,45 @@ public class Battle_UI extends JFrame implements ActionListener {
         PokemonCollection pokemonCollection = new PokemonCollection();
         Pokemon[] enemies = getRandomEnemies(pokemonCollection, selectedPokemon);
 
+
         enemy1 = enemies[0];
         enemy2 = enemies[1];
 
         enemy1Label = new JLabel();
-        enemy1Label.setText("Enemy 1: " + enemy1.getName() + "  Type: " + enemy1.getType());
+        enemy1Label.setText(" Enemy pokemon 1: " + enemy1.getName() + "  Type: " + enemy1.getType());
 
         enemy1HealthLabel = new JLabel();
-        enemy1HealthLabel.setText("Enemy 1 Health: " + enemy1.getHp());
+        enemy1HealthLabel.setText(" Enemy pokemon 1 Health: " + enemy1.getHp());
 
         enemy2Label = new JLabel();
-        enemy2Label.setText("Enemy 2: " + enemy2.getName() + "  Type: " + enemy2.getType());
+        enemy2Label.setText(" Enemy pokemon 2: " + enemy2.getName() + "  Type: " + enemy2.getType());
 
         enemy2HealthLabel = new JLabel();
-        enemy2HealthLabel.setText("Enemy 2 Health: " + enemy2.getHp());
+        enemy2HealthLabel.setText(" Enemy pokemon 2 Health: " + enemy2.getHp());
+
+        rbEnemy1 = new JRadioButton("Enemy 1", true);
+        rbEnemy2 = new JRadioButton("Enemy 2", false);
+
+        ButtonGroup enemyGroup = new ButtonGroup();
+        enemyGroup.add(rbEnemy1);
+        enemyGroup.add(rbEnemy2);
+
+        chooseEnemyLabel = new JLabel("Choose the enemy to attack:");
 
         yourPokemonHealthLabel = new JLabel();
-        yourPokemonHealthLabel.setText("Your Pokemon Health: " + selectedPokemon.getHp());
+        yourPokemonHealthLabel.setText(" Your First Pokemon Health: " + selectedPokemon.getHp());
 
         userPokemonLabel = new JLabel();
-        userPokemonLabel.setText("Your Pokemon: " + selectedPokemon.getName());
+        userPokemonLabel.setText(" Your First Pokemon: " + selectedPokemon.getName() + "  Type: " + selectedPokemon.getType());
 
         Pokemon[] userPokemonOptions = getRandomEnemies(pokemonCollection, selectedPokemon);
         userPokemon2 = userPokemonOptions[0];
 
+        yourPokemon2HealthLabel = new JLabel();
+        yourPokemon2HealthLabel.setText(" Your Second Pokemon Health: " + userPokemon2.getHp());
+
         userPokemon2Label = new JLabel();
-        userPokemon2Label.setText("Your Second Pokemon: " + userPokemon2.getName() + "  Type: " + userPokemon2.getType()
-                + "  Health: " + userPokemon2.getHp());
+        userPokemon2Label.setText(" Your Second Pokemon: " + userPokemon2.getName() + "  Type: " + userPokemon2.getType());
 
         yourPokemon = selectedPokemon;
 
@@ -93,25 +112,38 @@ public class Battle_UI extends JFrame implements ActionListener {
         userPokemonGroup.add(rbUserPokemon1);
         userPokemonGroup.add(rbUserPokemon2);
 
+        chooseyourpokemon = new JLabel();
+        chooseyourpokemon.setText("Choose your pokemon: ");
+
         rbAttack1 = new JRadioButton("", false);
         rbAttack2 = new JRadioButton("", false);
         hideAttackOptions();  // Hide attack options initially
+
+        chooseAttackLabel = new JLabel();
+        chooseAttackLabel.setText("Choose your attack!");
 
         choosePokemonButton = new JButton("Choose Pokemon");
         chooseAttackButton = new JButton("Choose Attack");
         chooseAttackButton.setEnabled(false);
 
-        panel = new JPanel(new GridLayout(16, 1));
+        
+        panel = new JPanel(new GridLayout(22, 1));
         panel.add(userLabel);
         panel.add(enemy1Label);
         panel.add(enemy1HealthLabel);
         panel.add(enemy2Label);
         panel.add(enemy2HealthLabel);
+        panel.add(chooseEnemyLabel);  
+        panel.add(rbEnemy1);
+        panel.add(rbEnemy2);
         panel.add(userPokemonLabel);
+        panel.add(userPokemon2Label);
+        panel.add(yourPokemonHealthLabel);
+        panel.add(yourPokemon2HealthLabel);
+        panel.add(chooseyourpokemon);
         panel.add(rbUserPokemon1);
         panel.add(rbUserPokemon2);
-        panel.add(yourPokemonHealthLabel);
-        panel.add(userPokemon2Label);
+        panel.add(chooseAttackLabel);
         panel.add(rbAttack1);
         panel.add(rbAttack2);
         panel.add(choosePokemonButton);
@@ -139,15 +171,6 @@ public class Battle_UI extends JFrame implements ActionListener {
         return Arrays.copyOfRange(shuffledPokemon.toArray(new Pokemon[0]), 0, 2);
     }
 
-    private Pokemon chooseEnemy() {
-        if (enemy1.getHp() > 0) {
-            return enemy1;
-        } else if (enemy2.getHp() > 0) {
-            return enemy2;
-        } else {
-            return null; // Both enemies defeated
-        }
-    }
 
     private void hideAttackOptions() {
         rbAttack1.setVisible(false);
@@ -160,6 +183,17 @@ public class Battle_UI extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
+        Pokemon selectedEnemy = null;
+
+        if (isEnemyChosen) {
+            if (rbEnemy1.isSelected()){
+                    selectedEnemy = enemy1;
+            } else if (rbEnemy2.isSelected()){
+                    selectedEnemy = enemy2;
+            }
+        }
+
+
         if (ae.getSource() == choosePokemonButton && !isSkillChosen) {
             if (rbUserPokemon1.isSelected()) {
                 chosenPokemon = yourPokemon;
@@ -169,24 +203,26 @@ public class Battle_UI extends JFrame implements ActionListener {
 
             rbAttack1.setText(chosenPokemon.getZMove());
             rbAttack2.setText(chosenPokemon.getMoveType());
-            showAttackOptions();  // Show attack options after choosing a Pokemon
+            showAttackOptions();
             isSkillChosen = true;
             chooseAttackButton.setEnabled(true);
             choosePokemonButton.setVisible(false);
             return;
         }
 
+
+
         if (ae.getSource() == chooseAttackButton) {
             isAttackChosen = true;
         }
 
-        Pokemon enemy = chooseEnemy();
+        Pokemon enemy = selectedEnemy;
         String attackInfo = "";
         String enemyAttackInfo = "";
 
         if (isAttackChosen) {
             if (rbAttack1.isSelected()) {
-                chosenPokemon.attack(enemy, "special");
+                chosenPokemon.attack(selectedEnemy, "special");
                 attackInfo = chosenPokemon.getLastAttackInfo();
                 if (enemy.getHp() <= 0) {
                     // Check if the enemy is defeated after the special move
@@ -198,10 +234,16 @@ public class Battle_UI extends JFrame implements ActionListener {
                     enemyAttackInfo = enemy.getLastAttackInfo();
                 }
             } else if (rbAttack2.isSelected()) {
-                chosenPokemon.attack(enemy, "normal");
+                chosenPokemon.attack(selectedEnemy, "normal");
                 attackInfo = chosenPokemon.getLastAttackInfo();
                 enemy.attack(chosenPokemon, "normal");
                 enemyAttackInfo = enemy.getLastAttackInfo();
+            }
+
+            if (chosenPokemon == yourPokemon) {
+                yourPokemonHealthLabel.setText(" Your First Pokemon Health: " + Math.max(chosenPokemon.getHp(), 0));
+            } else if (chosenPokemon == userPokemon2) {
+                yourPokemon2HealthLabel.setText(" Your Second Pokemon Health: " + Math.max(chosenPokemon.getHp(), 0));
             }
 
             if (battleinfo != null) {
@@ -218,9 +260,10 @@ public class Battle_UI extends JFrame implements ActionListener {
             enemyattackInfo = new JLabel(enemyAttackInfo);
             panel.add(enemyattackInfo);
 
-            enemy1HealthLabel.setText("Enemy 1 Health: " + Math.max(enemy1.getHp(), 0));
-            enemy2HealthLabel.setText("Enemy 2 Health: " + Math.max(enemy2.getHp(), 0));
-            yourPokemonHealthLabel.setText("Your Pokemon Health: " + Math.max(chosenPokemon.getHp(), 0));
+            enemy1HealthLabel.setText(" Enemy 1 Health: " + Math.max(enemy1.getHp(), 0));
+            enemy2HealthLabel.setText(" Enemy 2 Health: " + Math.max(enemy2.getHp(), 0));
+            yourPokemonHealthLabel.setText(" Your First Pokemon Health: " + Math.max(yourPokemon.getHp(), 0));
+            yourPokemon2HealthLabel.setText(" Your Second Pokemon Health: " + Math.max(userPokemon2.getHp(), 0));
 
             if (enemy1.getHp() <= 0 && enemy2.getHp() <= 0) {
                 dispose();
@@ -236,10 +279,24 @@ public class Battle_UI extends JFrame implements ActionListener {
                 dispose();
                 new Result_UI().result(username);
             }
-
-
+            if (yourPokemon.getHp() <= 0 && userPokemon2.getHp() >= 0) {
+                yourPokemonHealthLabel.setText("Your pokemon is dead");
+                rbUserPokemon1.setVisible(false);
+            }
+             if (yourPokemon.getHp() >= 0 && userPokemon2.getHp() <= 0) {
+                yourPokemon2HealthLabel.setText("Your second pokemon is dead");
+                rbUserPokemon2.setVisible(false);
+            }
+            if (enemy1.getHp()<=0 && enemy2.getHp()>=0){
+                enemy1HealthLabel.setText("Enemy Pokemon 1 has died");
+                rbEnemy1.setVisible(false);
+            }
+            if (enemy1.getHp()>=0 && enemy2.getHp()<=0){
+                enemy2HealthLabel.setText("Enemy Pokemon 2 has died");
+                rbEnemy2.setVisible(false);
+            }
             if (isSkillChosen) {
-                hideAttackOptions();  // Hide attack options after an attack
+                hideAttackOptions(); 
                 chooseAttackButton.setEnabled(false);
                 isAttackChosen = false;
                 isSkillChosen = false;
