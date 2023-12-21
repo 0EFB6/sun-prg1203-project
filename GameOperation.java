@@ -86,7 +86,7 @@ public class GameOperation {
         GameUtil.updatePlayerScore(player.getUsername(), player.getScore());   
     }
 
-    public static void startBattle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy, Scanner scanner) {
+    private static void startBattle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy, Scanner scanner) {
         String startBattle;        
         System.out.println("It's time for battle! Get ready!\n");
         System.out.println("[Your Selection 1] " + playerPokemon1.getName());
@@ -144,7 +144,7 @@ public class GameOperation {
         System.out.println("\nGame ended! Thank you for playing Pokemon Battle!");
     }
 
-    public static void printBattleDetails(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy) {
+    private static void printBattleDetails(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy) {
         GameUtil.clearTerminal();
         System.out.println("Battle started!\n");
         System.out.println("-------------------------------");
@@ -194,7 +194,7 @@ public class GameOperation {
         System.out.println("\n");
     }
 
-    public static boolean battle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy, Scanner scanner) {
+    private static boolean battle(Pokemon playerPokemon1, Pokemon playerPokemon2, List<Pokemon> enemy, Scanner scanner) {
         Random random = new Random();
         String attackType;
         int choicePlayer = 0;
@@ -229,7 +229,7 @@ public class GameOperation {
         return true;
     }
 
-    public static void  catchPokemon(List<Pokemon> enemy, Scanner scanner) {
+    private static void  catchPokemon(List<Pokemon> enemy, Scanner scanner) {
         Catch catchPokeball = null;
         int pokemonChoice = 0;
 
@@ -452,7 +452,7 @@ public class GameOperation {
             System.out.println("You win! Congratulations!!! Catching pokemon in 3 ... 2 ... 1 ...");
             GameUtil.wait(3000);
     }
-    
+
     private static boolean handleVictory(List<Pokemon> enemy)
     {
         if (enemy.get(0).getPokemonHp() <= 0 && enemy.get(1).getPokemonHp() <= 0)
