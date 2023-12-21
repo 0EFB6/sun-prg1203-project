@@ -13,12 +13,12 @@ public class GameUtil {
         String username;
 
         System.out.println("Welcome to Pokemon Battle!");
-        System.out.println("Please login to continue.");
+        System.out.println("Please enter username to continue.");
         System.out.println();
         System.out.print("Username: ");
         username = scanner.next();
         clearTerminal();
-        System.out.println("[" + username + "] " + "Login successful!");
+        System.out.println("[" + username + "] " + "Successfully recorded your username!");
         System.out.println();
         return username;
     }
@@ -35,8 +35,8 @@ public class GameUtil {
             }
         }
         List<Player> player = readPlayerScoresFromFile(file);
-        updatePlayerScoreInList(player, username, currentScore);
-        writePlayerScoresToFile(file, player);
+        List<Player> leaderboard = updatePlayerScoreInList(player, username, currentScore);
+        writePlayerScoresToFile(file, leaderboard);
     }
 
     private static List<Player> readPlayerScoresFromFile(File file) {
@@ -55,7 +55,7 @@ public class GameUtil {
         return playerList;
     }
 
-    private static void updatePlayerScoreInList(List<Player> playerList, String username, int currentScore) {
+    private static List<Player> updatePlayerScoreInList(List<Player> playerList, String username, int currentScore) {
         boolean found = false;
 
         for (Player player : playerList) {
@@ -77,6 +77,7 @@ public class GameUtil {
         }
         playerList.sort(Comparator.comparingInt(Player::getScore).reversed());
         playerList = playerList.subList(0, Math.min(playerList.size(), 5));
+        return playerList;
     }
 
     private static void writePlayerScoresToFile(File file, List<Player> playerList) {
